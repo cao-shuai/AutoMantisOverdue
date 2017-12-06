@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Email>
-
+<root>
+	<Email>
 	<!-- send email from infomations-->
 	<SEND_EMAIL_INFO>
-	<!--user 163 smtp servers!!!-->
-	<mail_host>smtp.163.com</mail_host>
-	<!-- user this user and password send email-->
-	<mail_user>scott.cao@163.com</mail_user>
-	<!-- client password not login password-->
-	<mail_password>mstar123</mail_password>
+		<!--user 163 smtp servers!!!-->
+		<mail_host>smtp.163.com</mail_host>
+		<!-- user this user and password send email-->
+		<mail_user>mstar_scott_cao@163.com</mail_user>
+		<!-- client password not login password-->
+		<mail_password>mstar123</mail_password>
 	</SEND_EMAIL_INFO>
 
 	<!-- send email to the email addres list-->
@@ -17,5 +17,5 @@
 		<perstion>jy.chen@mstarsemi.com</perstion>
 		<perstion>elbert.li@mstarsemi.com</perstion>
 	</SENDTOLISTADDRS>
-
-</Email>
+	</Email>
+</root>
