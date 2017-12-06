@@ -27,8 +27,3 @@ class Email(object):
         server.login(self.mail_user,self.mail_pass);
         server.sendmail(self.me, to_list, msg.as_string());
         server.close();
-
-if __name__ == '__main__':
-    MantisEmail=Email();
-    MantisEmail.add_send_to("scott.cao");
-    MantisEmail.SendEmails();
