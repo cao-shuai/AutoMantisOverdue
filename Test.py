@@ -1,7 +1,6 @@
 from SendEmail import Email
 
 class TestClass(object):
-	"""docstring for TestSendEmailClass"""
 
 	def TestsendEmailClass(self):
 		email=Email();
