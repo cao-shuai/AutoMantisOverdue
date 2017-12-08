@@ -1,4 +1,4 @@
-from SendEmail import Email
+from base.SendEmail import Email
 
 class TestClass(object):
 
