@@ -4,7 +4,10 @@ class TestClass(object):
 
 	def TestsendEmailClass(self):
 		email=Email();
-		email.SendEmails();
+		if email.SendEmails():
+			print "send email sucessfull";
+		else:
+			print "send email fail";
 
 if __name__ == '__main__':
 	test=TestClass();

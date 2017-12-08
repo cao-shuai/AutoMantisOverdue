@@ -47,15 +47,22 @@ class Email(object):
 
     
     def SendEmails(self):
-        self.__send_mail__(self.mailto_list, "Mantis Overdue", "OverDue Mantis ID: XXXXX");
+        if self.__send_mail__(self.mailto_list, "Mantis Overdue", "OverDue Mantis ID: XXXXX"):
+            return True;
+        else:
+            return False;
 
     def __send_mail__(self,to_list,sub,content):
         msg = MIMEText(content,_subtype='plain');  
         msg['Subject'] = sub;  
         msg['From'] = self.mail_user;
         msg['To'] = ";".join(to_list);
-        server = smtplib.SMTP();
-        server.connect(self.mail_host,25);
-        server.login(self.mail_user,self.mail_pass);
-        server.sendmail(self.mail_user, to_list, msg.as_string());
-        server.close();
+        try:
+            server = smtplib.SMTP();
+            server.connect(self.mail_host,25);
+            server.login(self.mail_user,self.mail_pass);
+            server.sendmail(self.mail_user, to_list, msg.as_string());
+            server.close();
+            return True;
+        except (Exception):
+            return False;
