@@ -38,7 +38,7 @@ class Email(object):
         #rewrite ContextHanler
         Handler=EmailHandler();
         parser.setContentHandler(Handler);
-        parser.parse("./config/email.xml");
+        parser.parse("./config/config.xml");
 
         self.mail_host=Handler.mail_host;
         self.mail_user=Handler.mail_user;
