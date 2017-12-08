@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-	<Email>
-	<!-- send email from infomations-->
-	<SEND_EMAIL_INFO>
-		<!--user 163 smtp servers!!!-->
-		<mail_host>smtp.163.com</mail_host>
-		<!-- user this user and password send email-->
-		<mail_user>mstar_scott_cao@163.com</mail_user>
-		<!-- client password not login password-->
-		<mail_password>mstar123</mail_password>
-	</SEND_EMAIL_INFO>
-
-	<!-- send email to the email addres list-->
-	<SENDTOLISTADDRS>
-		<perstion>499055602@qq.com</perstion>
-		<!--perstion>jy.chen@mstarsemi.com</perstion>
-		<perstion>elbert.li@mstarsemi.com</perstion-->
-	</SENDTOLISTADDRS>
-	</Email>
+    <Email>
+    <!-- send email from infomations-->
+    <SEND_EMAIL_INFO>
+        <!--user 163 smtp servers!!!-->
+        <mail_host>smtp.163.com</mail_host>
+        <!-- user this user and password send email-->
+        <mail_user>mstar_scott_cao@163.com</mail_user>
+        <!-- client password not login password-->
+        <mail_password>mstar123</mail_password>
+        <!-- Email title-->
+        <mail_title>Mantis OverDue Test</mail_title>
+    </SEND_EMAIL_INFO>
+    <!-- send email to the email addres list-->
+    <SENDTOLISTADDRS>
+        <perstion>499055602@qq.com</perstion>
+        <!--perstion>jy.chen@mstarsemi.com</perstion>
+        <perstion>elbert.li@mstarsemi.com</perstion-->
+    </SENDTOLISTADDRS>
+    </Email>
+    <!-- contet file that's a temp html file store dir -->
+    <STORE-File>
+        <content-path>./out/content.html</content-path>
+    </STORE-File>
 </root>
