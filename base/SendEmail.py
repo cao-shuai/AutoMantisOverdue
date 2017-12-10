@@ -5,6 +5,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import xml.sax
+from email.header import Header
 
 
 #xml handler for parser xml
@@ -15,6 +16,8 @@ class EmailHandler(xml.sax.ContentHandler):
         self.mail_user="";
         self.mail_pass="";
         self.CurrentData="";
+        self.mail_content_path="";
+        self.mail_title="";
 
     def startElement(self,tag,attributes):
         self.CurrentData=tag;
@@ -71,18 +74,18 @@ class Email(object):
             return False;
 
     def __send_mail__(self,html):
-        msg = MIMEMultipart('alternative')
+        msg = MIMEMultipart('alternative');
         msg['Subject'] = self.mail_title;  
         msg['From'] = self.mail_user;
         msg['To'] = ";".join(self.mailto_list);
-        part = MIMEText(html, 'html');
+        part=MIMEText(html, 'html');
         msg.attach(part);
 
         try:
             server = smtplib.SMTP();
             server.connect(self.mail_host,25);
             server.login(self.mail_user,self.mail_pass);
-            server.sendmail(self.mail_user, self.mailto_list, msg.as_string());
+            server.sendmail(self.mail_user, msg['To'], msg.as_string());
             server.close();
             return True;
         except (Exception):
