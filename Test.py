@@ -1,9 +1,22 @@
 from base.SendEmail import Email
+import xml.sax
+from base.XMLHandler import XMLHandler
 
 class TestClass(object):
 
+	def TestXMLHandler(self):
+		#create XML Reader
+		parser=xml.sax.make_parser();
+		#turn off namepsaces
+		parser.setFeature(xml.sax.handler.feature_namespaces,0);
+		#rewrite ContextHanler
+		self.Handler=XMLHandler();
+		parser.setContentHandler(self.Handler);
+		parser.parse("./config/config.xml");
+
+
 	def TestsendEmailClass(self):
-		email=Email();
+		email=Email(self.Handler);
 		if email.SendEmails():
 			print "send email sucessfull";
 		else:
@@ -11,4 +24,5 @@ class TestClass(object):
 
 if __name__ == '__main__':
 	test=TestClass();
+	test.TestXMLHandler();
 	test.TestsendEmailClass();

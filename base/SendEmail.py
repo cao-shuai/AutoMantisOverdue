@@ -4,22 +4,11 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import xml.sax
 from email.header import Header
-from base.XMLHandler import XMLHandler
 
 class Email(object):
 
-    def __init__(self):
-        #create XML Reader
-        parser=xml.sax.make_parser();
-        #turn off namepsaces
-        parser.setFeature(xml.sax.handler.feature_namespaces,0);
-        #rewrite ContextHanler
-        Handler=XMLHandler();
-        parser.setContentHandler(Handler);
-        parser.parse("./config/config.xml");
-
+    def __init__(self,Handler):
         self.mail_host=Handler.mail_host;
         self.mail_user=Handler.mail_user;
         self.mail_pass=Handler.mail_pass;
