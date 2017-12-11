@@ -37,9 +37,9 @@ class EmailHandler(xml.sax.ContentHandler):
         	self.mail_title=content;
         elif self.CurrentData == "content-path":
         	self.mail_content_path=content;
-        elif self.CurrentData == "perstion":
+        elif self.CurrentData == "person":
             self.mailto_list.append(content);
-        elif self.CurrentData == "perstion_cc":
+        elif self.CurrentData == "person_cc":
         	self.mailto_list_cc.append(content);
 
 class Email(object):
