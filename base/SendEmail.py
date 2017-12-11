@@ -27,7 +27,7 @@ class Email(object):
         self.mailto_list_cc=Handler.mailto_list_cc;
         self.mail_title=Handler.mail_title;
         self.mail_content_path=Handler.mail_content_path;
-        self.mail_recver=self.mailto_list+self.mailto_list_cc;
+        self.mail_recver=Handler.mail_recver;
 
     
     def SendEmails(self):
@@ -48,17 +48,17 @@ class Email(object):
         msg = MIMEMultipart('alternative');
         msg['Subject'] = self.mail_title;  
         msg['From'] = self.mail_user;
-        msg['To'] = ",".join(self.mailto_list);
-        msg['Cc'] = ",".join(self.mailto_list_cc);
+        msg['To'] = ";".join(self.mailto_list);
+        msg['Cc'] = ";".join(self.mailto_list_cc);
         part=MIMEText(html, 'html');
         msg.attach(part);
 
         try:
-	        server = smtplib.SMTP();
-	        server.connect(self.mail_host,25);
-	        server.login(self.mail_user,self.mail_pass);
-	        server.sendmail(self.mail_user, self.mail_recver, msg.as_string());
-	        server.close();
+	        smtp = smtplib.SMTP();
+	        smtp.connect(self.mail_host,25);
+	        smtp.login(self.mail_user,self.mail_pass);
+	        smtp.sendmail(self.mail_user, self.mail_recver, msg.as_string());
+	        smtp.close();
 	        return True;
         except (Exception):
         	return False;

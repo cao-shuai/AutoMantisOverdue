@@ -8,6 +8,7 @@ class XMLHandler(xml.sax.ContentHandler):
         self.mail_host="";
         self.mailto_list=[];
         self.mailto_list_cc=[];
+        self.mail_recver=[];
         self.mail_user="";
         self.mail_pass="";
         self.CurrentData="";
@@ -33,5 +34,8 @@ class XMLHandler(xml.sax.ContentHandler):
         	self.mail_content_path=content;
         elif self.CurrentData == "person":
             self.mailto_list.append(content);
+            self.mail_recver.append(content);
         elif self.CurrentData == "person_cc":
-        	self.mailto_list_cc.append(content);
+            self.mail_recver.append(content);
+            self.mailto_list_cc.append(content);
+            

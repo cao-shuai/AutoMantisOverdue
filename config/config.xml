@@ -14,7 +14,7 @@
     </SEND_EMAIL_INFO>
     <!-- send email to the email addres list-->
     <SENDTOLISTADDRS>
-        <person>scott.cao@mstarsemi.com</person>
+        <person>jy.chen@mstarsemi.com</person>
         <person_cc>scott.cao@mstarsemi.com</person_cc>
         <!--person>jy.chen@mstarsemi.com</person>
         <person_cc>albin.he@mstarsemi.com</person_cc>
