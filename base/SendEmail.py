@@ -13,6 +13,7 @@ class EmailHandler(xml.sax.ContentHandler):
     def __init__(self):
         self.mail_host="";
         self.mailto_list=[];
+        self.mailto_list_cc=[];
         self.mail_user="";
         self.mail_pass="";
         self.CurrentData="";
@@ -38,6 +39,8 @@ class EmailHandler(xml.sax.ContentHandler):
         	self.mail_content_path=content;
         elif self.CurrentData == "perstion":
             self.mailto_list.append(content);
+        elif self.CurrentData == "perstion_cc":
+        	self.mailto_list_cc.append(content);
 
 class Email(object):
 
@@ -55,8 +58,10 @@ class Email(object):
         self.mail_user=Handler.mail_user;
         self.mail_pass=Handler.mail_pass;
         self.mailto_list=Handler.mailto_list;
+        self.mailto_list_cc=Handler.mailto_list_cc;
         self.mail_title=Handler.mail_title;
         self.mail_content_path=Handler.mail_content_path;
+        self.mail_recver=self.mailto_list+self.mailto_list_cc;
 
     
     def SendEmails(self):
@@ -77,17 +82,17 @@ class Email(object):
         msg = MIMEMultipart('alternative');
         msg['Subject'] = self.mail_title;  
         msg['From'] = self.mail_user;
-        msg['To'] = ";".join(self.mailto_list);
+        msg['To'] = ",".join(self.mailto_list);
+        msg['Cc'] = ",".join(self.mailto_list_cc);
         part=MIMEText(html, 'html');
         msg.attach(part);
 
         try:
-            server = smtplib.SMTP();
-            server.connect(self.mail_host,25);
-            server.login(self.mail_user,self.mail_pass);
-            server.sendmail(self.mail_user, msg['To'], msg.as_string());
-            server.close();
-            return True;
+	        server = smtplib.SMTP();
+	        server.connect(self.mail_host,25);
+	        server.login(self.mail_user,self.mail_pass);
+	        server.sendmail(self.mail_user, self.mail_recver, msg.as_string());
+	        server.close();
+	        return True;
         except (Exception):
-            return False;
-    	
+        	return False;

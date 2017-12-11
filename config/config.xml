@@ -10,13 +10,16 @@
         <!-- client password not login password-->
         <mail_password>mstar123</mail_password>
         <!-- Email title-->
-        <mail_title>Mantis OverDue Test</mail_title>
+        <mail_title>Auto Mantis OverDue Test</mail_title>
     </SEND_EMAIL_INFO>
     <!-- send email to the email addres list-->
     <SENDTOLISTADDRS>
-        <perstion>499055602@qq.com</perstion>
+        <perstion>scott.cao@mstarsemi.com</perstion>
+        <perstion_cc>scott.cao@mstarsemi.com</perstion_cc>
         <!--perstion>jy.chen@mstarsemi.com</perstion>
-        <perstion>elbert.li@mstarsemi.com</perstion-->
+        <perstion_cc>albin.he@mstarsemi.com</perstion_cc>
+        <perstion_cc>given.deng@mstarsemi.com</perstion_cc>
+        <perstion_cc>wt.wang@mstarsemi.com</perstion_cc-->
     </SENDTOLISTADDRS>
     </Email>
     <!-- contet file that's a temp html file store dir -->
