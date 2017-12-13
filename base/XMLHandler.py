@@ -14,7 +14,6 @@ class XMLHandler(xml.sax.ContentHandler):
         self.CurrentData="";
         self.mail_content_path="";
         self.mail_title="";
-        self.root_url="";
         self.login_url="";
 
     def startElement(self,tag,attributes):
@@ -40,8 +39,6 @@ class XMLHandler(xml.sax.ContentHandler):
         elif self.CurrentData == "person_cc":
             self.mail_recver.append(content);
             self.mailto_list_cc.append(content);
-        elif self.CurrentData == "root-url":
-            self.root_url=content;
         elif self.CurrentData == "login-url":
             self.login_url=content;
             

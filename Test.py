@@ -30,4 +30,4 @@ if __name__ == '__main__':
 	test=TestClass();
 	test.TestXMLHandler();
 	test.TestDoadLoadWeb();
-	test.TestsendEmailClass();
+	#test.TestsendEmailClass();

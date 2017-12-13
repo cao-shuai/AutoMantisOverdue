@@ -27,7 +27,6 @@
         <content-path>./out/content.html</content-path>
     </STORE-File>
     <URL>
-        <root-url>http://mantis.mstarsemi.com/</root-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
     </URL>
 </root>

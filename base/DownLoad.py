@@ -10,7 +10,10 @@ class DownLoadWeb(object):
 		self.xmlhandler=handler;
 
 	def StartDownLoad(self):
-		root_url=self.xmlhandler.root_url;
+		login_url=self.xmlhandler.login_url;
+		print login_url;
+		#login the mantis web server!!!
+		self.__Login__(login_url);
 
 
 	def __DownLoad_Source_Get__(self,url):
