@@ -1,6 +1,7 @@
 from base.SendEmail import Email
 import xml.sax
 from base.XMLHandler import XMLHandler
+from base.DownLoad import DownLoadWeb
 
 class TestClass(object):
 
@@ -14,6 +15,9 @@ class TestClass(object):
 		parser.setContentHandler(self.Handler);
 		parser.parse("./config/config.xml");
 
+	def TestDoadLoadWeb(self):
+		html=DownLoadWeb(self.Handler);
+		html.StartDownLoad();
 
 	def TestsendEmailClass(self):
 		email=Email(self.Handler);
@@ -25,4 +29,5 @@ class TestClass(object):
 if __name__ == '__main__':
 	test=TestClass();
 	test.TestXMLHandler();
+	test.TestDoadLoadWeb();
 	test.TestsendEmailClass();

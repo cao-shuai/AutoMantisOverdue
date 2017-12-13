@@ -1,1 +1,1 @@
-__all__=['SendEmail','Email','XMLHandler']
+__all__=['SendEmail','Email','XMLHandler','DownLoad','DownLoadWeb']

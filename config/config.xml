@@ -14,7 +14,7 @@
     </SEND_EMAIL_INFO>
     <!-- send email to the email addres list-->
     <SENDTOLISTADDRS>
-        <person>jy.chen@mstarsemi.com</person>
+        <person>499055602@qq.com</person>
         <person_cc>scott.cao@mstarsemi.com</person_cc>
         <!--person>jy.chen@mstarsemi.com</person>
         <person_cc>albin.he@mstarsemi.com</person_cc>
@@ -26,4 +26,8 @@
     <STORE-File>
         <content-path>./out/content.html</content-path>
     </STORE-File>
+    <URL>
+        <root-url>http://mantis.mstarsemi.com/</root-url>
+        <login-url>http://mantis.mstarsemi.com/login.php</login-url>
+    </URL>
 </root>

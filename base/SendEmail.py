@@ -47,7 +47,10 @@ class Email(object):
 	        smtp.connect(self.mail_host,25);
 	        smtp.login(self.mail_user,self.mail_pass);
 	        smtp.sendmail(self.mail_user, self.mail_recver, msg.as_string());
-	        smtp.close();
-	        return True;
-        except (Exception):
-        	return False;
+	        result=True;
+        except Exception(), err:
+            trackback.print_exec();
+            result=False;
+        finally:
+            smtp.close();
+        return result;
