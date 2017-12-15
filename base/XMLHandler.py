@@ -15,6 +15,8 @@ class XMLHandler(xml.sax.ContentHandler):
         self.mail_content_path="";
         self.mail_title="";
         self.login_url="";
+        self.login_username="";
+        self.login_password="";
 
     def startElement(self,tag,attributes):
         self.CurrentData=tag;
@@ -41,4 +43,7 @@ class XMLHandler(xml.sax.ContentHandler):
             self.mailto_list_cc.append(content);
         elif self.CurrentData == "login-url":
             self.login_url=content;
-            
+        elif self.CurrentData == "login-username":
+            self.login_username=content;
+        elif self.CurrentData == "login-password":
+            self.login_password=content;

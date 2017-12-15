@@ -8,7 +8,7 @@
         <!-- user this user and password send email-->
         <mail_user>mstar_scott_cao@163.com</mail_user>
         <!-- client password not login password-->
-        <mail_password>mstar123</mail_password>
+        <mail_password>xxxxx</mail_password>
         <!-- Email title-->
         <mail_title>Auto Mantis OverDue Test</mail_title>
     </SEND_EMAIL_INFO>
@@ -16,10 +16,6 @@
     <SENDTOLISTADDRS>
         <person>499055602@qq.com</person>
         <person_cc>scott.cao@mstarsemi.com</person_cc>
-        <!--person>jy.chen@mstarsemi.com</person>
-        <person_cc>albin.he@mstarsemi.com</person_cc>
-        <person_cc>given.deng@mstarsemi.com</person_cc>
-        <person_cc>wt.wang@mstarsemi.com</person_cc-->
     </SENDTOLISTADDRS>
     </Email>
     <!-- contet file that's a temp html file store dir -->
@@ -28,5 +24,7 @@
     </STORE-File>
     <URL>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
+        <login-username>scott.cao</login-username>
+        <login-password>xxxx;</login-password>
     </URL>
 </root>
