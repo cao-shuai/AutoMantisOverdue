@@ -25,6 +25,15 @@
     <URL>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
         <login-username>scott.cao</login-username>
-        <login-password>xxxx;</login-password>
+        <login-password>xxxxx</login-password>
     </URL>
+    <MANTIS_PROJECT>
+        <mantis-project-id>CUS_IPANEL_K3S_Android_DDI</mantis-project-id>
+        <mantis-project-id>Cus_JIUZHOU_6A801BD_DDI</mantis-project-id>
+        <mantis-project-id>CUS_Jiuzhou_SN_K2S_DVB</mantis-project-id>
+        <mantis-project-id>CUS_JZ_K2S_SN-Ginga</mantis-project-id>
+        <mantis-project-id>CUS_JZ_U4_SN-Freesat</mantis-project-id>
+        <mantis-project-id>G_HQ_C2P_OTTBOX</mantis-project-id>
+        <mantis-project-id>G_HQ_C2P_OTTBOX_CMCC</mantis-project-id>
+    </MANTIS_PROJECT>
 </root>

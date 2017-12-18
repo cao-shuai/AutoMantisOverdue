@@ -17,6 +17,7 @@ class XMLHandler(xml.sax.ContentHandler):
         self.login_url="";
         self.login_username="";
         self.login_password="";
+        self.mantis_project_list=[];
 
     def startElement(self,tag,attributes):
         self.CurrentData=tag;
@@ -47,3 +48,5 @@ class XMLHandler(xml.sax.ContentHandler):
             self.login_username=content;
         elif self.CurrentData == "login-password":
             self.login_password=content;
+        elif self.CurrentData == "mantis-project-id":
+            self.mantis_project_list.append(content);
