@@ -7,7 +7,7 @@ import httplib
 import urllib2
 import cookielib
 from HTMLParserProjectToID import HTMLParserProjectToID
-
+from HTMLParserProjectToID import HTMLParserOverDueMaintInfomation
 
 #download html form url
 class DownLoadWeb(object):
@@ -63,7 +63,9 @@ class DownLoadWeb(object):
 		if not os.path.exists(self.tempdirs):
 			os.makedirs(self.tempdirs);
 		result=self.htmlhandler.open(url);
-		with open("out/temp/"+filename+".html","w") as f:
-			f.write(result.read());
-			f.close();
+		#with open("out/temp/"+filename+".html","w") as f:
+		#	f.write(result.read());
+		#	f.close();
+		html=HTMLParserOverDueMaintInfomation();
+		html.feed(result.read());
 		self.htmlhandler.close();
