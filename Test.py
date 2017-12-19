@@ -18,6 +18,7 @@ class TestClass(object):
 	def TestDoadLoadWeb(self):
 		html=DownLoadWeb(self.Handler);
 		html.StartDownLoad();
+		html.CloseDownLoad();
 
 	def TestsendEmailClass(self):
 		email=Email(self.Handler);

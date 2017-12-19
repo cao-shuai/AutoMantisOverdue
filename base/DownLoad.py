@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 #coding: utf-8
+import os
+import shutil
 import urllib
 import httplib
 import urllib2
@@ -11,6 +13,7 @@ from HTMLParserProjectToID import HTMLParserProjectToID
 class DownLoadWeb(object):
 	"""docstring for DownLoadWeb"""
 	def __init__(self,handler):
+		self.tempdirs="out/temp";
 		self.xmlhandler=handler;
 		self.htmlhandler='';
 		self.parserhtmlhandler=''
@@ -24,15 +27,13 @@ class DownLoadWeb(object):
 		login_url=self.xmlhandler.login_url;
 		#login the mantis web server!!!
 		self.__Login__(login_url);
-		self.DownLoadProject(login_url);
+		self.__DownLoadProject__(login_url);
 
-	def __Login__(self,url):
-		mycookie=cookielib.MozillaCookieJar();
-		self.htmlhandler=urllib2.build_opener(urllib2.HTTPCookieProcessor(mycookie));
-		result=self.htmlhandler.open(url,self.data);
+	def CloseDownLoad(self):
+		if os.path.exists(self.tempdirs):
+			shutil.rmtree(self.tempdirs);
 
-
-	def DownLoadProject(self,starturl):
+	def __DownLoadProject__(self,starturl):
 		self.__ConstructProjectIDList__(starturl);
 		for item in self.xmlhandler.mantis_project_list:
 			project_Id=self.parserhtmlhandler.GetProjectId(item);
@@ -41,16 +42,28 @@ class DownLoadWeb(object):
 	def __DonwnLoadFromProjectId__(self,value,storehtmlfilename):
 		#http post funtion url to set_project.php? and set project_id=value, can change the project id
 		self.filter["project_id"]=value;
-		self.htmlhandler.open("http://mantis.mstarsemi.com/set_project.php?",urllib.urlencode(self.filter));
-		self.__savehtmlfile__("http://mantis.mstarsemi.com/view_all_bug_page.php",storehtmlfilename);
+		self.htmlhandler.open(self.xmlhandler.main_url+"/set_project.php?",urllib.urlencode(self.filter));
+		self.__savehtmlfile__(self.xmlhandler.main_url+"/print_all_bug_page.php",storehtmlfilename);
+		self.htmlhandler.close();
 		
 	#构建project id list 列表
 	def __ConstructProjectIDList__(self,url):
 		html_page=self.htmlhandler.open(url);
 		self.parserhtmlhandler=HTMLParserProjectToID();
 		self.parserhtmlhandler.feed(html_page.read());
+		self.parserhtmlhandler.close();
+
+	def __Login__(self,url):
+		mycookie=cookielib.MozillaCookieJar();
+		self.htmlhandler=urllib2.build_opener(urllib2.HTTPCookieProcessor(mycookie));
+		result=self.htmlhandler.open(url,self.data);
+		self.htmlhandler.close();
 		
 	def __savehtmlfile__(self,url,filename):
+		if not os.path.exists(self.tempdirs):
+			os.makedirs(self.tempdirs);
 		result=self.htmlhandler.open(url);
-		with open("out/"+filename+".html","w") as f:
+		with open("out/temp/"+filename+".html","w") as f:
 			f.write(result.read());
+			f.close();
+		self.htmlhandler.close();

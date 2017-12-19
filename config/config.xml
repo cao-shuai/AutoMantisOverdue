@@ -23,9 +23,10 @@
         <content-path>./out/content.html</content-path>
     </STORE-File>
     <URL>
+        <main-url>http://mantis.mstarsemi.com</main-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
         <login-username>scott.cao</login-username>
-        <login-password>xxxxx</login-password>
+        <login-password>xxxx</login-password>
     </URL>
     <MANTIS_PROJECT>
         <mantis-project-id>CUS_IPANEL_K3S_Android_DDI</mantis-project-id>
