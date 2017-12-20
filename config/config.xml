@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
+    <PARSEBY>Projects</PARSEBY>
     <Email>
     <!-- send email from infomations-->
     <SEND_EMAIL_INFO>
@@ -8,20 +9,16 @@
         <!-- user this user and password send email-->
         <mail_user>mstar_scott_cao@163.com</mail_user>
         <!-- client password not login password-->
-        <mail_password>xxxxx</mail_password>
+        <mail_password>xxxx</mail_password>
         <!-- Email title-->
         <mail_title>Auto Mantis OverDue Test</mail_title>
     </SEND_EMAIL_INFO>
-    <!-- send email to the email addres list-->
+    <!-- send email to the email addres list, if PARSEBY is Projects,this is not function-->
     <SENDTOLISTADDRS>
         <person>499055602@qq.com</person>
         <person_cc>scott.cao@mstarsemi.com</person_cc>
     </SENDTOLISTADDRS>
     </Email>
-    <!-- contet file that's a temp html file store dir -->
-    <STORE-File>
-        <content-path>./out/content.html</content-path>
-    </STORE-File>
     <URL>
         <main-url>http://mantis.mstarsemi.com</main-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
@@ -29,12 +26,6 @@
         <login-password>xxxx</login-password>
     </URL>
     <MANTIS_PROJECT>
-        <mantis-project-id>CUS_IPANEL_K3S_Android_DDI</mantis-project-id>
-        <mantis-project-id>Cus_JIUZHOU_6A801BD_DDI</mantis-project-id>
-        <mantis-project-id>CUS_Jiuzhou_SN_K2S_DVB</mantis-project-id>
-        <mantis-project-id>CUS_JZ_K2S_SN-Ginga</mantis-project-id>
-        <mantis-project-id>CUS_JZ_U4_SN-Freesat</mantis-project-id>
-        <mantis-project-id>G_HQ_C2P_OTTBOX</mantis-project-id>
-        <mantis-project-id>G_HQ_C2P_OTTBOX_CMCC</mantis-project-id>
+        <mantis-project-id>I_SZSTB_TaskTracking</mantis-project-id>
     </MANTIS_PROJECT>
 </root>

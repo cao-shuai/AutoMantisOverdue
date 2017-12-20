@@ -31,7 +31,7 @@ class ConstructEmail(object):
 		self.filehander=open(self.emailPathName,"aw");
 		self.__ConStrcutEmailHeader__();
 
-	def WirteInfoMation(self,mantisid,mantiscontent,maintsdueday,lastupdate,mantisowner,mantisownerclass="软件五课",mantisownerleader="scott.cao"):
+	def WirteInfoMation(self,mantisid,mantiscontent,maintsdueday,lastupdate,mantisowner,mantisownerclass="需要接入数据库",mantisownerleader="需要构建数据库"):
 		if self.filehander:
 			self.filehander.write(self.html_Email_tr_begin);
 			self.filehander.write(self.html_Email_td_begin+'<a href="https://mantis.mstarsemi.com/view.php?id='+mantisid+'">'+mantisid+"</a>"+self.html_Email_td_End);

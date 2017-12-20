@@ -35,12 +35,6 @@ class DownLoadWeb(object):
 		return self.ProjectEmailList;
 
 	def CloseDownLoad(self):
-		for index in xrange(len(self.ProjectEmailList)):
-			#print self.ProjectEmailList[index];
-			for projectname in (self.ProjectEmailList[index]):
-				print "需要发送邮件项目名称: ",projectname;
-				for x in xrange(len(self.ProjectEmailList[index][projectname])):
-					print "需要发送邮件人的姓名：",self.ProjectEmailList[index][projectname][x];
 		del self.ProjectEmailList[:];
 		self.filter.clear();
 

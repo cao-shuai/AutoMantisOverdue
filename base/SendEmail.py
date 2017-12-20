@@ -5,6 +5,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
+import copy
 
 class Email(object):
 
@@ -12,18 +13,28 @@ class Email(object):
         self.mail_host=Handler.mail_host;
         self.mail_user=Handler.mail_user;
         self.mail_pass=Handler.mail_pass;
-        self.mailto_list=Handler.mailto_list;
-        self.mailto_list_cc=Handler.mailto_list_cc;
         self.mail_title=Handler.mail_title;
-        self.mail_content_path=Handler.mail_content_path;
-        self.mail_recver=Handler.mail_recver;
+        self.parseby=Handler.parseby;
+        if self.parseby == "Projects":
+            self.mailto_list=[]
+            self.mailto_list_cc=[];
+            self.mail_recver=[];
+        else:
+            self.mailto_list=Handler.mailto_list;
+            self.mailto_list_cc=Handler.mailto_list_cc;
+            self.mail_recver=Handler.mail_recver;
 
-    
-    def SendEmails(self):
-    	#construct email content!!!
-    	#test info begin
+    def AddEmailPerson(self,person,emailsuffix,bIsCC=False):
+        personemail=person+emailsuffix;
+        self.mail_recver.append(personemail);
+        if bIsCC == False:
+            self.mailto_list.append(personemail);
+        else:
+            self.mailto_list_cc.append(personemail);    
+
+    def SendEmails(self,path):
     	try:
-    		htmlf=open(self.mail_content_path);
+    		htmlf=open(path);
 	    	html = htmlf.read();
     	finally:
     		htmlf.close();
@@ -37,9 +48,9 @@ class Email(object):
         msg = MIMEMultipart('alternative');
         msg['Subject'] = self.mail_title;  
         msg['From'] = self.mail_user;
-        msg['To'] = ";".join(self.mailto_list);
-        msg['Cc'] = ";".join(self.mailto_list_cc);
-        part=MIMEText(html, 'html');
+        msg['To'] = ",".join(self.mailto_list);
+        msg['Cc'] = ",".join(self.mailto_list_cc);
+        part=MIMEText(html,'html',_charset='UTF-8');
         msg.attach(part);
 
         try:

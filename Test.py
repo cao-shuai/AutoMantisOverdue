@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#coding: utf-8
 from base.SendEmail import Email
 import xml.sax
 from base.XMLHandler import XMLHandler
@@ -15,20 +17,22 @@ class TestClass(object):
 		parser.setContentHandler(self.Handler);
 		parser.parse("./config/config.xml");
 
-	def TestDoadLoadWeb(self):
+	def TestProjectS(self):
+		self.TestXMLHandler();
+		email=Email(self.Handler);
 		html=DownLoadWeb(self.Handler);
 		html.StartDownLoad();
+		ProjectEmailList=html.GetProjectEmailList();
+		for index in xrange(len(ProjectEmailList)):
+			#print self.ProjectEmailList[index];
+			for projectname in (ProjectEmailList[index]):
+				print "需要发送邮件项目名称1: ",projectname;
+				for x in xrange(len(ProjectEmailList[index][projectname])):
+					print "需要发送邮件人的姓名1：",ProjectEmailList[index][projectname][x];
+					email.AddEmailPerson(ProjectEmailList[index][projectname][x],"@mstarsemi.com");
+				email.SendEmails("./out/"+projectname+".html");
 		html.CloseDownLoad();
-
-	def TestsendEmailClass(self):
-		email=Email(self.Handler);
-		if email.SendEmails():
-			print "send email sucessfull";
-		else:
-			print "send email fail";
 
 if __name__ == '__main__':
 	test=TestClass();
-	test.TestXMLHandler();
-	test.TestDoadLoadWeb();
-	#test.TestsendEmailClass();
+	test.TestProjectS();

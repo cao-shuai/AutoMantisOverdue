@@ -12,13 +12,13 @@ class XMLHandler(xml.sax.ContentHandler):
         self.mail_user="";
         self.mail_pass="";
         self.CurrentData="";
-        self.mail_content_path="";
         self.mail_title="";
         self.login_url="";
         self.login_username="";
         self.login_password="";
         self.mantis_project_list=[];
         self.main_url="";
+        self.parseby="Projects";# defalut is by Projects!!!
 
     def startElement(self,tag,attributes):
         self.CurrentData=tag;
@@ -35,8 +35,6 @@ class XMLHandler(xml.sax.ContentHandler):
             self.mail_pass=content;
         elif self.CurrentData == "mail_title":
         	self.mail_title=content;
-        elif self.CurrentData == "content-path":
-        	self.mail_content_path=content;
         elif self.CurrentData == "person":
             self.mailto_list.append(content);
             self.mail_recver.append(content);
@@ -53,3 +51,5 @@ class XMLHandler(xml.sax.ContentHandler):
             self.mantis_project_list.append(content);
         elif self.CurrentData == "main-url":
             self.main_url=content;
+        elif self.CurrentData == "PARSEBY":
+            self.parseby=content;
