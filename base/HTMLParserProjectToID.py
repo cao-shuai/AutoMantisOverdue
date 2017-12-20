@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #coding: utf-8
 from HTMLParser import HTMLParser
+from WriteEmailInfo import ConstructEmail
 
 class HTMLParserProjectToID(HTMLParser):
 	"""docstring for ClassName"""
@@ -36,17 +37,13 @@ class HTMLParserProjectToID(HTMLParser):
 class HTMLParserOverDueMaintInfomation(HTMLParser):
 
 	parserdata=[];
-	dirctMaintInfo={};#{"MantisID": "00000",
-					#"MantisHref:": "-------",
-					#"MantisContent": "======",
-					#"MantisDueDay": "0-0-0\n",
-					#"MantisOwner:": "xxx",
-					#"OWnerClass": "软件五课",
-					#"OwnerLeader": "scott.cao"};
-	Content="";
 	bInManitsTable=False;
 	bFirstData=False;#这个只是为了修复第一次给过来的data为不可见数据，还需要进一步分析，次为临时path
 	bStore=False;
+
+	def open(self,filename):
+		self.ConstructEmailHandle=ConstructEmail();
+		self.ConstructEmailHandle.open(filename);
 
 	def handle_starttag(self,tag,attrs):
 		if tag == "tr":
@@ -80,7 +77,8 @@ class HTMLParserOverDueMaintInfomation(HTMLParser):
 				print "Mantis Description :",self.parserdata[-1];
 				print "Mantis Owner: ",self.parserdata[-5];
 				print "Manits DueDay: ",self.parserdata[-3];
-				print "Mantis LastUpdate: ",self.parserdata[-2]
+				print "Mantis LastUpdate: ",self.parserdata[-2];
+				self.ConstructEmailHandle.WirteInfoMation(self.parserdata[0],self.parserdata[-1],self.parserdata[-3],self.parserdata[-2],self.parserdata[-5]);
 			del self.parserdata[:];
 			print "离开mantis Table 分析表!!!"
 			print "\n";
@@ -91,3 +89,6 @@ class HTMLParserOverDueMaintInfomation(HTMLParser):
 				self.parserdata.append(data);
 			else:
 				self.bFirstData=False;
+
+	def close(self):
+		self.ConstructEmailHandle.close();

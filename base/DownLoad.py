@@ -43,7 +43,7 @@ class DownLoadWeb(object):
 		#http post funtion url to set_project.php? and set project_id=value, can change the project id
 		self.filter["project_id"]=value;
 		self.htmlhandler.open(self.xmlhandler.main_url+"/set_project.php?",urllib.urlencode(self.filter));
-		self.__savehtmlfile__(self.xmlhandler.main_url+"/print_all_bug_page.php",storehtmlfilename);
+		self.__SaveHtmlEmailFile__(self.xmlhandler.main_url+"/print_all_bug_page.php",storehtmlfilename);
 		self.htmlhandler.close();
 		
 	#构建project id list 列表
@@ -59,13 +59,12 @@ class DownLoadWeb(object):
 		result=self.htmlhandler.open(url,self.data);
 		self.htmlhandler.close();
 		
-	def __savehtmlfile__(self,url,filename):
+	def __SaveHtmlEmailFile__(self,url,filename):
 		if not os.path.exists(self.tempdirs):
 			os.makedirs(self.tempdirs);
 		result=self.htmlhandler.open(url);
-		#with open("out/temp/"+filename+".html","w") as f:
-		#	f.write(result.read());
-		#	f.close();
 		html=HTMLParserOverDueMaintInfomation();
+		html.open(filename);
 		html.feed(result.read());
+		html.close();
 		self.htmlhandler.close();
