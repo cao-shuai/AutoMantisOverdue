@@ -25,6 +25,8 @@ class ConstructEmail(object):
 			print "ConStruct Email File error  file not open !!!";
 
 	def open(self,emailName):
+		if not os.path.exists("out/"):
+			os.mkdir("out/");
 		self.emailPathName = "out/"+emailName+".html";
 		if os.path.exists(self.emailPathName):
 			os.remove(self.emailPathName);
