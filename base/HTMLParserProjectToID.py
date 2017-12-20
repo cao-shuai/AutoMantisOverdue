@@ -40,6 +40,7 @@ class HTMLParserOverDueMaintInfomation(HTMLParser):
 	bInManitsTable=False;
 	bFirstData=False;#这个只是为了修复第一次给过来的data为不可见数据，还需要进一步分析，次为临时path
 	bStore=False;
+	emaillist=[];
 
 	def open(self,filename):
 		self.ConstructEmailHandle=ConstructEmail();
@@ -72,13 +73,14 @@ class HTMLParserOverDueMaintInfomation(HTMLParser):
 			#for index in range(len(self.parserdata)):
 			#	print "index:",index, "	vaule:",self.parserdata[index];
 			if self.bStore == True:
-				print "这些mantis需要存储："
+				print "这些mantis即将被需要存储："
 				print "Mantis ID: ",self.parserdata[0];
 				print "Mantis Description :",self.parserdata[-1];
-				print "Mantis Owner: ",self.parserdata[-5];
+				print "Mantis Owner: ",self.parserdata[-5][2:-1];
 				print "Manits DueDay: ",self.parserdata[-3];
 				print "Mantis LastUpdate: ",self.parserdata[-2];
-				self.ConstructEmailHandle.WirteInfoMation(self.parserdata[0],self.parserdata[-1],self.parserdata[-3],self.parserdata[-2],self.parserdata[-5]);
+				self.emaillist.append(self.parserdata[-5][2:-1]);
+				self.ConstructEmailHandle.WirteInfoMation(self.parserdata[0],self.parserdata[-1],self.parserdata[-3],self.parserdata[-2],self.parserdata[-5][2:-1]);
 			del self.parserdata[:];
 			print "离开mantis Table 分析表!!!"
 			print "\n";
@@ -90,5 +92,14 @@ class HTMLParserOverDueMaintInfomation(HTMLParser):
 			else:
 				self.bFirstData=False;
 
+	def GetProjectEmailList(self):
+		self.emaillist=list(set(self.emaillist));
+		#debug 时打开
+		#for index in xrange(len(self.emaillist)):
+		#	print "即将发送邮件给这些人：",self.emaillist[index];
+		return self.emaillist;
+
 	def close(self):
 		self.ConstructEmailHandle.close();
+		del self.parserdata[:];		
+		del self.emaillist[:];
