@@ -15,14 +15,14 @@ class Email(object):
         self.mail_pass=Handler.mail_pass;
         self.mail_title=Handler.mail_title;
         self.parseby=Handler.parseby;
-        if self.parseby == "Projects":
-            self.mailto_list=[]
-            self.mailto_list_cc=[];
-            self.mail_recver=[];
-        else:
-            self.mailto_list=Handler.mailto_list;
-            self.mailto_list_cc=Handler.mailto_list_cc;
-            self.mail_recver=Handler.mail_recver;
+       # if self.parseby == "Projects":
+        #    self.mailto_list=[]
+         #   self.mailto_list_cc=[];
+         #   self.mail_recver=[];
+        #else:
+        self.mailto_list=copy.deepcopy(Handler.mailto_list);
+        self.mailto_list_cc=copy.deepcopy(Handler.mailto_list_cc);
+        self.mail_recver=copy.deepcopy(Handler.mail_recver);
 
 
     def AddEmailPerson(self,person,emailsuffix,bIsCC=False):
@@ -39,9 +39,10 @@ class Email(object):
                 htmlf=open(path);
                 self.html = htmlf.read();
             finally:
-                htmlf.close();
+                htmlf.close();True
         else:
             self.html="太棒了，今天没有mantis overdue！！！";
+
         #send email 
         if self.__send_mail__(self.html,ProjectName):
             return True;

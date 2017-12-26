@@ -37,7 +37,6 @@ class TestClass(object):
 						if ProjectEmailList[index][projectname][x] is not None:
 							print "需要发送邮件人的姓名：",ProjectEmailList[index][projectname][x];
 							email.AddEmailPerson(ProjectEmailList[index][projectname][x],"@mstarsemi.com");
-				#email.AddEmailPerson("scott.cao","@mstarsemi.com",True); #this will cc some person
 				email.SendEmails("./out/"+projectname+".html",projectname,bIsNeedSendEmail);
 		html.CloseDownLoad();
 
