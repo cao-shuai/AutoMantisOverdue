@@ -4,6 +4,7 @@ from base.SendEmail import Email
 import xml.sax
 from base.XMLHandler import XMLHandler
 from base.DownLoad import DownLoadWeb
+import sys
 
 class TestClass(object):
 
@@ -24,7 +25,7 @@ class TestClass(object):
 		html.StartDownLoad();
 		ProjectEmailList=html.GetProjectEmailList();
 		for index in xrange(len(ProjectEmailList)):
-			#print self.ProjectEmailList[index];
+			#print ProjectEmailList[index];
 			for projectname in (ProjectEmailList[index]):
 				print "需要发送邮件项目名称1: ",projectname;
 				for x in xrange(len(ProjectEmailList[index][projectname])):
@@ -34,5 +35,7 @@ class TestClass(object):
 		html.CloseDownLoad();
 
 if __name__ == '__main__':
+	reload(sys);
+	sys.setdefaultencoding('utf-8');
 	test=TestClass();
 	test.TestProjectS();

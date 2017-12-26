@@ -13,7 +13,7 @@
         <!-- Email title-->
         <mail_title>Auto Mantis OverDue Test</mail_title>
     </SEND_EMAIL_INFO>
-    <!-- send email to the email addres list, if PARSEBY is Projects,this is not function-->
+    <!-- send email to the email addres list, if PARSEBY is Projects,this will not to use-->
     <SENDTOLISTADDRS>
         <person>499055602@qq.com</person>
         <person_cc>scott.cao@mstarsemi.com</person_cc>

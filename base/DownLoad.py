@@ -7,7 +7,7 @@ import httplib
 import urllib2
 import cookielib
 from HTMLParserProjectToID import HTMLParserProjectToID
-from HTMLParserProjectToID import HTMLParserOverDueMaintInfomation
+from HTMLParserProjectToID import ParserHTMLOverDueMaintInfomations
 import copy
 
 #download html form url
@@ -66,11 +66,14 @@ class DownLoadWeb(object):
 		
 	def __SaveHtmlEmailFile__(self,url,projectname):
 		result=self.htmlhandler.open(url);
-		html=HTMLParserOverDueMaintInfomation();
+		html=ParserHTMLOverDueMaintInfomations(result.read());
 		html.open(projectname);
-		html.feed(result.read());
-		#emaillist=html.GetProjectEmailList();
-		#project_email={projectname: copy.deepcopy(emaillist)}; #特别留意深浅copy
+		html.ConstructEmail();
+		#html=HTMLParserOverDueMaintInfomation();
+		#html.open(projectname);
+		#html.feed(result.read());
+		emaillist=html.GetProjectEmailList();
+		project_email={projectname: copy.deepcopy(emaillist)}; #特别留意深浅copy
 		self.ProjectEmailList.append({projectname: copy.deepcopy(html.GetProjectEmailList())});#特别留意深浅copy
 		html.close();
 		self.htmlhandler.close();

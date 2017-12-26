@@ -2,6 +2,9 @@
 #coding: utf-8
 from HTMLParser import HTMLParser
 from WriteEmailInfo import ConstructEmail
+from bs4 import BeautifulSoup
+from lxml import etree
+import re
 
 class HTMLParserProjectToID(HTMLParser):
 	"""docstring for ClassName"""
@@ -34,63 +37,71 @@ class HTMLParserProjectToID(HTMLParser):
 	def GetProjectId(self,project_name):
 		return self.project_dict[project_name];
 
-class HTMLParserOverDueMaintInfomation(HTMLParser):
+class ParserHTMLOverDueMaintInfomations(object):
 
-	parserdata=[];
-	bInManitsTable=False;
-	bFirstData=False;#这个只是为了修复第一次给过来的data为不可见数据，还需要进一步分析，次为临时path
-	bStore=False;
-	emaillist=[];
+	"""docstring for ClassName"""
+	def __init__(self, string):
+		self.soup = BeautifulSoup(string,'lxml',from_encoding='utf-8');
+		self.emaillist=[];
+
+	def __defalutValue__(self):
+		self.mantisId='';
+		self.mantisOwner='';
+		self.mantisDueDay='';
+		self.mantisLastUpdate='';
+		self.mantisDescription=''
+		self.bIsStore=False;
 
 	def open(self,filename):
 		self.ConstructEmailHandle=ConstructEmail();
 		self.ConstructEmailHandle.open(filename);
 
-	def handle_starttag(self,tag,attrs):
-		if tag == "tr":
-			bInMantis=[False,False];
-			for key,value in attrs:
-				if key == "bgcolor":
-					bInMantis[0]=True;
-				elif key == "border":
-					bInMantis[1]=True;
-			if bInMantis[0] == True and bInMantis[1] == True:
-				self.bInManitsTable=True;
-				self.bFirstData=True;
-				print "进入mantis Table 分析表!!!"
-		elif self.bInManitsTable == True and tag == "a":
-			 for key,value in attrs:
-			 	  if key == "title": 
-			 	  	if value == "open":
-			 	  		self.bStore=True;
-			 	  	else:
-			 	  		self.bStore=False;
-
-	def handle_endtag(self,tag):
-		#print "End tag:",tag;
-		if tag == "tr" and self.bInManitsTable == True:
-			self.bInManitsTable=False;
-			#for index in range(len(self.parserdata)):
-			#	print "index:",index, "	vaule:",self.parserdata[index];
-			if self.bStore == True:
-				print "这些mantis即将被需要存储："
-				print "Mantis ID: ",self.parserdata[0];
-				print "Mantis Description :",self.parserdata[-1];
-				print "Mantis Owner: ",self.parserdata[-5][2:-1];
-				print "Manits DueDay: ",self.parserdata[-3];
-				print "Mantis LastUpdate: ",self.parserdata[-2];
-				self.emaillist.append(self.parserdata[-5][2:-1]);
-				self.ConstructEmailHandle.WirteInfoMation(self.parserdata[0],self.parserdata[-1],self.parserdata[-3],self.parserdata[-2],self.parserdata[-5][2:-1]);
-			del self.parserdata[:];
-			print "离开mantis Table 分析表!!!"
-			print "\n";
-
-	def handle_data(self,data):
-		if self.bInManitsTable == True:
-			if self.bFirstData == False:
-				self.parserdata.append(data);
-			else:
-				self.bFirstData=False;
+	def ConstructEmail(self):
+		#print self.soup.prettify();
+		#print "html head contents name:",len(self.soup.head.contents);
+		pattern_for_mantisowner=re.compile('\(.*\)');
+		for tag in self.soup.find_all('tr'):
+			if tag.has_attr('bgcolor') and tag.has_attr('border'):
+				self.__defalutValue__();
+				index=0;
+				for child in tag.children:
+					if child.name == 'td':
+						if index == 2:#mantis id
+							#print "mantis id: ",child.string;
+							self.mantisId=child.string;
+						elif index == 6: #mantis owner
+							for status in child.find_all('a'):
+								if status.has_attr('title') and status.get('title') == "open":
+									#print "this mantis need store";
+									self.bIsStore=True;
+							result=re.search(pattern_for_mantisowner,child.get_text());
+							if result is None:
+								print "mantis 未分配！！！";
+								self.mantisOwner='';
+							else:
+								#print "mantis owner:",result.group()[1:-1];
+								#for string in child.strings:	
+								self.mantisOwner=result.group()[1:-1];
+						elif index == 8:#mantis due day
+							#print "mantis DueDay:",child.string;
+							self.mantisDueDay=child.string;
+						elif index == 9:
+							#print "mantis LastUpdate",child.string;
+							self.mantisLastUpdate=child.string;
+						elif index == 10:
+							#print "mantis Description",child.string;
+							self.mantisDescription=child.string;
+						index=index+1;
+				if self.bIsStore == True:
+					print "这些mantis即将被需要存储："
+					print "Mantis ID: ",self.mantisId;
+					print "Mantis Description :",self.mantisDescription;
+					print "Mantis Owner: ",self.mantisOwner;
+					print "Manits DueDay: ",self.mantisDueDay;
+					print "Mantis LastUpdate: ",self.mantisLastUpdate;
+					print "\n";
+					self.emaillist.append(self.mantisOwner);
+					self.ConstructEmailHandle.WirteInfoMation(self.mantisId,self.mantisDescription,self.mantisDueDay,self.mantisLastUpdate,self.mantisOwner);
 
 	def GetProjectEmailList(self):
 		self.emaillist=list(set(self.emaillist));
@@ -101,5 +112,4 @@ class HTMLParserOverDueMaintInfomation(HTMLParser):
 
 	def close(self):
 		self.ConstructEmailHandle.close();
-		del self.parserdata[:];		
 		del self.emaillist[:];
