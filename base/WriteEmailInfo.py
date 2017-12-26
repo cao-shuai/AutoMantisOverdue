@@ -38,9 +38,15 @@ class ConstructEmail(object):
 			self.filehander.write(self.html_Email_tr_begin);
 			self.filehander.write(self.html_Email_td_begin+'<a href="https://mantis.mstarsemi.com/view.php?id='+mantisid+'">'+mantisid+"</a>"+self.html_Email_td_End);
 			self.filehander.write(self.html_Email_td_begin+mantiscontent+self.html_Email_td_End);
-			self.filehander.write(self.html_Email_td_begin+maintsdueday+self.html_Email_td_End);
+			if maintsdueday is None:
+				self.filehander.write(self.html_Email_td_begin+"PM设定dueday"+self.html_Email_td_End);
+			else:
+				self.filehander.write(self.html_Email_td_begin+maintsdueday+self.html_Email_td_End);
 			self.filehander.write(self.html_Email_td_begin+lastupdate+self.html_Email_td_End);
-			self.filehander.write(self.html_Email_td_begin+mantisowner+self.html_Email_td_End);
+			if mantisowner is None:
+				self.filehander.write(self.html_Email_td_begin+"PM尽快分配问题"+self.html_Email_td_End);
+			else:
+				self.filehander.write(self.html_Email_td_begin+mantisowner+self.html_Email_td_End);
 			self.filehander.write(self.html_Email_td_begin+mantisownerclass+self.html_Email_td_End);
 			self.filehander.write(self.html_Email_td_begin+mantisownerleader+self.html_Email_td_End);
 			self.filehander.write(self.html_Email_tr_End);

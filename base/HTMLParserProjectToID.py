@@ -80,7 +80,7 @@ class ParserHTMLOverDueMaintInfomations(object):
 							result=re.search(pattern_for_mantisowner,child.get_text());
 							if result is None:
 								print "mantis 未分配！！！";
-								self.mantisOwner='';
+								self.mantisOwner=None;
 							else:
 								#print "mantis owner:",result.group()[1:-1];
 								#for string in child.strings:	
@@ -93,6 +93,8 @@ class ParserHTMLOverDueMaintInfomations(object):
 								if cmp(self.mantisDueDay,self.currenttime) < 0:
 									self.bIsOverDue = True;
 							else:
+								print "due day 未填写！！！"
+								self.mantisDueDay=None;
 								self.bIsOverDue=True;
 						elif index == 9:
 							#print "mantis LastUpdate",child.string;
