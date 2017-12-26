@@ -3,7 +3,6 @@
 from HTMLParser import HTMLParser
 from WriteEmailInfo import ConstructEmail
 from bs4 import BeautifulSoup
-from lxml import etree
 import re
 
 class HTMLParserProjectToID(HTMLParser):
