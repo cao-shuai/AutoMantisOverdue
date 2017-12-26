@@ -5,7 +5,6 @@ import xml.sax
 from base.XMLHandler import XMLHandler
 from base.DownLoad import DownLoadWeb
 import sys
-import time
 
 class TestClass(object):
 
@@ -39,7 +38,6 @@ class TestClass(object):
 							print "需要发送邮件人的姓名：",ProjectEmailList[index][projectname][x];
 							email.AddEmailPerson(ProjectEmailList[index][projectname][x],"@mstarsemi.com");
 				email.SendEmails("./out/"+projectname+".html",projectname,bIsNeedSendEmail);
-				time.sleep(60);
 		html.CloseDownLoad();
 
 if __name__ == '__main__':
