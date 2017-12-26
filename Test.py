@@ -27,11 +27,18 @@ class TestClass(object):
 		for index in xrange(len(ProjectEmailList)):
 			#print ProjectEmailList[index];
 			for projectname in (ProjectEmailList[index]):
-				print "需要发送邮件项目名称1: ",projectname;
-				for x in xrange(len(ProjectEmailList[index][projectname])):
-					print "需要发送邮件人的姓名1：",ProjectEmailList[index][projectname][x];
-					email.AddEmailPerson(ProjectEmailList[index][projectname][x],"@mstarsemi.com");
-				email.SendEmails("./out/"+projectname+".html");
+				print "项目名称: ",projectname;
+				bIsNeedSendEmail=False;
+				if len(ProjectEmailList[index][projectname]) == 0:
+					print "太棒了，今天没有mantis overdue！！！"
+				else:
+					bIsNeedSendEmail=True;
+					for x in xrange(len(ProjectEmailList[index][projectname])):
+						if ProjectEmailList[index][projectname][x] is not None:
+							print "需要发送邮件人的姓名：",ProjectEmailList[index][projectname][x];
+							email.AddEmailPerson(ProjectEmailList[index][projectname][x],"@mstarsemi.com");
+				#email.AddEmailPerson("scott.cao","@mstarsemi.com",True); #this will cc some person
+				email.SendEmails("./out/"+projectname+".html",projectname,bIsNeedSendEmail);
 		html.CloseDownLoad();
 
 if __name__ == '__main__':

@@ -24,6 +24,7 @@ class Email(object):
             self.mailto_list_cc=Handler.mailto_list_cc;
             self.mail_recver=Handler.mail_recver;
 
+
     def AddEmailPerson(self,person,emailsuffix,bIsCC=False):
         personemail=person+emailsuffix;
         self.mail_recver.append(personemail);
@@ -32,21 +33,24 @@ class Email(object):
         else:
             self.mailto_list_cc.append(personemail);    
 
-    def SendEmails(self,path):
-    	try:
-    		htmlf=open(path);
-	    	html = htmlf.read();
-    	finally:
-    		htmlf.close();
+    def SendEmails(self,path,ProjectName,bhasOverDue=True):
+        if bhasOverDue == True:
+            try:
+                htmlf=open(path);
+                self.html = htmlf.read();
+            finally:
+                htmlf.close();
+        else:
+            self.html="太棒了，今天没有mantis overdue！！！";
         #send email 
-        if self.__send_mail__(html):
+        if self.__send_mail__(self.html,ProjectName):
             return True;
         else:
             return False;
 
-    def __send_mail__(self,html):
+    def __send_mail__(self,html,ProjectName):
         msg = MIMEMultipart('alternative');
-        msg['Subject'] = self.mail_title;  
+        msg['Subject'] = ProjectName+" "+self.mail_title;  
         msg['From'] = self.mail_user;
         msg['To'] = ",".join(self.mailto_list);
         msg['Cc'] = ",".join(self.mailto_list_cc);

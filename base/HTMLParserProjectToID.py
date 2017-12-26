@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 #coding: utf-8
+import re
+import time
 from HTMLParser import HTMLParser
 from WriteEmailInfo import ConstructEmail
 from bs4 import BeautifulSoup
-import re
 
 class HTMLParserProjectToID(HTMLParser):
 	"""docstring for ClassName"""
@@ -42,6 +43,8 @@ class ParserHTMLOverDueMaintInfomations(object):
 	def __init__(self, string):
 		self.soup = BeautifulSoup(string,'lxml',from_encoding='utf-8');
 		self.emaillist=[];
+		self.currenttime=time.strftime('%y-%m-%d',time.localtime(time.time()));
+		#print self.currenttime;
 
 	def __defalutValue__(self):
 		self.mantisId='';
@@ -50,6 +53,7 @@ class ParserHTMLOverDueMaintInfomations(object):
 		self.mantisLastUpdate='';
 		self.mantisDescription=''
 		self.bIsStore=False;
+		self.bIsOverDue=False;
 
 	def open(self,filename):
 		self.ConstructEmailHandle=ConstructEmail();
@@ -84,6 +88,12 @@ class ParserHTMLOverDueMaintInfomations(object):
 						elif index == 8:#mantis due day
 							#print "mantis DueDay:",child.string;
 							self.mantisDueDay=child.string;
+							if self.mantisDueDay is not None:	
+								#print self.mantisDueDay.split('-');
+								if cmp(self.mantisDueDay,self.currenttime) < 0:
+									self.bIsOverDue = True;
+							else:
+								self.bIsOverDue=True;
 						elif index == 9:
 							#print "mantis LastUpdate",child.string;
 							self.mantisLastUpdate=child.string;
@@ -91,7 +101,7 @@ class ParserHTMLOverDueMaintInfomations(object):
 							#print "mantis Description",child.string;
 							self.mantisDescription=child.string;
 						index=index+1;
-				if self.bIsStore == True:
+				if self.bIsStore == True and self.bIsOverDue == True:
 					print "这些mantis即将被需要存储："
 					print "Mantis ID: ",self.mantisId;
 					print "Mantis Description :",self.mantisDescription;
