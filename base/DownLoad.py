@@ -78,7 +78,7 @@ class DownLoadWeb(object):
 		self.filter["type"]=1;
 		self.filter["view_type"]="simple";
 		self.filter["page_number"]=1;
-		self.filter["per_page"]=5;
+		self.filter["per_page"]=200;
 		self.filter["handler_id"]=self.currentperson_id;
 		self.filter["hide_status"]=self.currentHideStatus_id;
 		self.filter["filter"]="Apply Filter";
