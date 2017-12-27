@@ -9,7 +9,7 @@
         <!-- user this user and password send email-->
         <mail_user>mstar_scott_cao@163.com</mail_user>
         <!-- client password not login password-->
-        <mail_password>xxxxx</mail_password>
+        <mail_password>xxxx</mail_password>
         <!-- Email title-->
         <mail_title>Mantis OverDue</mail_title>
     </SEND_EMAIL_INFO>
@@ -17,18 +17,15 @@
     <SENDTOLISTADDRS>
         <person_cc>scott.cao@mstarsemi.com</person_cc>
         <person_cc>albin.he@mstarsemi.com</person_cc>
-        <person_cc>given.deng@mstarsemi.com</person_cc>
-        <person_cc>treasure.tsai@mstarsemi.com</person_cc>
     </SENDTOLISTADDRS>
     </Email>
     <URL>
         <main-url>http://mantis.mstarsemi.com</main-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
         <login-username>scott.cao</login-username>
-        <login-password>xxxxxx</login-password>
+        <login-password>xxxx</login-password>
     </URL>
     <MANTIS_PROJECT>
-        <mantis-project-id>G_HQ_C2P_OTTBOX</mantis-project-id>
-        <mantis-project-id>G_HQ_C2P_OTTBOX_CMCC</mantis-project-id>
+        <mantis-project-id>All Projects</mantis-project-id>
     </MANTIS_PROJECT>
 </root>

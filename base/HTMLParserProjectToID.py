@@ -37,14 +37,59 @@ class HTMLParserProjectToID(HTMLParser):
 	def GetProjectId(self,project_name):
 		return self.project_dict[project_name];
 
-class ParserHTMLOverDueMaintInfomations(object):
+class HTMLParserAssignedToByPerson(object):
+	"""docstring for HTMLParserProjectByPerson"""
+	def __init__(self, string):
+		self.soup = BeautifulSoup(string,'lxml',from_encoding='utf-8');
+		self.person_id_dict={};
 
+	def ConstructPersonToIdList(self):
+		for tag in self.soup.find_all('option'):
+			if tag.has_attr('value'):
+				username=tag.get_text();
+				#print "username is: ",username;
+				persionid=tag.attrs['value'];
+				#print "persion id: ",persionid;
+				self.person_id_dict[username]=persionid;
+
+	def GetPersonId(self,username):
+		if username in self.person_id_dict:
+			#print "username is: ",username;
+			#print "user project id:",self.person_id_dict[username];
+			return self.person_id_dict[username];
+		else:
+			print "无法获取username 对应的user id"
+			return "00000";
+
+class HTMLPaserHideStatus(object):
 	"""docstring for ClassName"""
 	def __init__(self, string):
 		self.soup = BeautifulSoup(string,'lxml',from_encoding='utf-8');
-		self.emaillist=[];
-		self.currenttime=time.strftime('%y-%m-%d',time.localtime(time.time()));
-		#print self.currenttime;
+		self.hideStatus={};
+
+	def ConstructHideStatus(self):
+		for tag in self.soup.find_all('option'):
+			if tag.has_attr('value'):
+				hideStatu=tag.get_text();
+				hideStatu_id=tag.attrs['value'];
+				#print "hide Statu: ", hideStatu;
+				#print "hide_Statu_id: ", hideStatu_id;
+				self.hideStatus[hideStatu]=hideStatu_id;
+				
+	def GetHideStatusId(self,hideStatu_name):
+		if hideStatu_name in self.hideStatus:
+			#print "name: ",hideStatu_name;
+			#print "hide Statu id: ", self.hideStatus[hideStatu_name];
+			return self.hideStatus[hideStatu_name];
+		else:
+			#print "无法获取hide Status对应的id";
+			print "00000";
+
+class ParserHTMLOverDueMaintInfomations(object):
+
+	"""docstring for ClassName"""
+	def InitHTMLToBeautifulSoup(self, string):
+		self.soup = BeautifulSoup(string,'lxml',from_encoding='utf-8');
 
 	def __defalutValue__(self):
 		self.mantisId='';
@@ -58,6 +103,9 @@ class ParserHTMLOverDueMaintInfomations(object):
 	def open(self,filename):
 		self.ConstructEmailHandle=ConstructEmail();
 		self.ConstructEmailHandle.open(filename);
+		self.emaillist=[];
+		self.currenttime=time.strftime('%y-%m-%d',time.localtime(time.time()));
+		#print self.currenttime;
 
 	def ConstructEmail(self):
 		#print self.soup.prettify();
@@ -69,7 +117,7 @@ class ParserHTMLOverDueMaintInfomations(object):
 				index=0;
 				for child in tag.children:
 					if child.name == 'td':
-						if index == 2:#mantis id
+						if index == 3:#mantis id
 							#print "mantis id: ",child.string;
 							self.mantisId=child.string;
 						elif index == 6: #mantis owner
@@ -113,6 +161,18 @@ class ParserHTMLOverDueMaintInfomations(object):
 					print "\n";
 					self.emaillist.append(self.mantisOwner);
 					self.ConstructEmailHandle.WirteInfoMation(self.mantisId,self.mantisDescription,self.mantisDueDay,self.mantisLastUpdate,self.mantisOwner);
+
+	def GetNextHTMLPage(self):
+		url=None;
+		for tag in self.soup.find_all('a'):
+			if tag.has_attr('href') and tag.get_text() == "Next":
+				if url == "http://mantis.mstarsemi.com/"+tag.get('href'):
+					print "The same URL";
+				else:
+					print "has Next Page";
+					url="http://mantis.mstarsemi.com/"+tag.get('href');
+					print "url is: ",url;
+		return url;
 
 	def GetProjectEmailList(self):
 		self.emaillist=list(set(self.emaillist));
