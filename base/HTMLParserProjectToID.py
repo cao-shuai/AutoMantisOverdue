@@ -35,7 +35,10 @@ class HTMLParserProjectToID(HTMLParser):
 			self.project_dict[data]=self.project_value;
 
 	def GetProjectId(self,project_name):
-		return self.project_dict[project_name];
+		if project_name in self.project_dict:
+			return self.project_dict[project_name];
+		else:
+			print "can not get project id!!!";
 
 class HTMLParserAssignedToByPerson(object):
 	"""docstring for HTMLParserProjectByPerson"""
@@ -90,6 +93,26 @@ class ParserHTMLOverDueMaintInfomations(object):
 	"""docstring for ClassName"""
 	def InitHTMLToBeautifulSoup(self, string):
 		self.soup = BeautifulSoup(string,'lxml',from_encoding='utf-8');
+		self.ID=0;
+		self.Owner=0;
+		self.DueDate=0;
+		self.LastUpdate=0;
+		self.summary=0;
+		for tag in self.soup.find_all('tr',class_="row-category"):
+			index=0;
+			for child in tag.children:
+				if child.name == 'td':
+					if child.get_text()=="ID":
+						self.ID=index;
+					elif child.get_text()=="Status":
+						self.Owner=index;
+					elif child.get_text()=="Due Date":
+						self.DueDate=index;
+					elif child.get_text()== "Updated":
+						self.LastUpdate=index;
+					elif child.get_text()== "Summary":
+						self.summary=index;
+					index=index+1;
 
 	def __defalutValue__(self):
 		self.mantisId='';
@@ -117,10 +140,10 @@ class ParserHTMLOverDueMaintInfomations(object):
 				index=0;
 				for child in tag.children:
 					if child.name == 'td':
-						if index == 3:#mantis id
+						if index == self.ID:#mantis id
 							#print "mantis id: ",child.string;
 							self.mantisId=child.string;
-						elif index == 6: #mantis owner
+						elif index == self.Owner: #mantis owner
 							for status in child.find_all('a'):
 								if status.has_attr('title') and status.get('title') == "open":
 									#print "this mantis need store";
@@ -133,21 +156,21 @@ class ParserHTMLOverDueMaintInfomations(object):
 								#print "mantis owner:",result.group()[1:-1];
 								#for string in child.strings:	
 								self.mantisOwner=result.group()[1:-1];
-						elif index == 8:#mantis due day
+						elif index == self.DueDate:#mantis due day
 							#print "mantis DueDay:",child.string;
 							self.mantisDueDay=child.string;
 							if self.mantisDueDay is not None:	
-								#print self.mantisDueDay.split('-');
+								print self.mantisDueDay.split('-');
 								if cmp(self.mantisDueDay,self.currenttime) < 0:
 									self.bIsOverDue = True;
 							else:
 								print "due day 未填写！！！"
 								self.mantisDueDay=None;
 								self.bIsOverDue=True;
-						elif index == 9:
+						elif index == self.LastUpdate:
 							#print "mantis LastUpdate",child.string;
 							self.mantisLastUpdate=child.string;
-						elif index == 10:
+						elif index == self.summary:
 							#print "mantis Description",child.string;
 							self.mantisDescription=child.string;
 						index=index+1;

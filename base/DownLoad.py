@@ -67,13 +67,13 @@ class DownLoadWeb(object):
 
 	def __DownLoadProjectByPerson__(self,personname,hideStatus,projectname):
 		#请求构造选择人对应的handle id
-		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=handler_id_filter');
+		result=self.htmlhandler.open("http://mantis.mstarsemi.com/return_dynamic_filters.php?view_type=simple&filter_target=handler_id_filter");
 		html=HTMLParserAssignedToByPerson(result.read());
 		result.close();
 		html.ConstructPersonToIdList();
 		self.currentperson_id=html.GetPersonId(personname);
 		#请求构造选择hide status
-		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=hide_status_filter');
+		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=show_status_filter');
 		html=HTMLPaserHideStatus(result.read());
 		result.close();
 		html.ConstructHideStatus();
