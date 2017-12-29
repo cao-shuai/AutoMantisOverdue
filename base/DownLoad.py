@@ -12,6 +12,8 @@ from HTMLParserProjectToID import HTMLParserAssignedToByPerson
 from HTMLParserProjectToID import HTMLPaserHideStatus
 from XMLHandler import XMLConfigHandler
 import copy
+import json
+from urllib import quote
 
 #download html form url
 class DownLoadWeb(object):
@@ -86,11 +88,17 @@ class DownLoadWeb(object):
 		self.filter["view_type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"view_type");
 		self.filter["page_number"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"page_number");
 		self.filter["per_page"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"per_page");
-		self.filter["handler_id"]=self.currentperson_idList[0];#需要修改
 		self.filter["hide_status"]=self.currentHideStatus_id;
 		self.filter["filter"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"filter");
-		result=self.htmlhandler.open(self.main_url+"/view_all_set.php?f=3",urllib.urlencode(self.filter));
-		self.__SaveHtmlEmailFile__(self.main_url+"/view_all_bug_page.php",projectname);
+		currentprojecthtmlhander=ParserHTMLOverDueMaintInfomations();
+		for index in xrange(len(self.currentperson_idList)):
+			self.filter["handler_id"]=self.currentperson_idList[index];#需要修改
+			result=self.htmlhandler.open(self.main_url+"/view_all_set.php?f=3",urllib.urlencode(self.filter));
+			self.__SaveHtmlEmailFile__(self.main_url+"/view_all_bug_page.php",projectname,currentprojecthtmlhander,index);
+		emaillist=currentprojecthtmlhander.GetProjectEmailList();
+		#project_email={projectname: copy.deepcopy(emaillist)}; #特别留意深浅copy
+		self.ProjectEmailList.append({projectname: copy.deepcopy(currentprojecthtmlhander.GetProjectEmailList())});#特别留意深浅copy
+		currentprojecthtmlhander.close();
 		self.htmlhandler.close();
 
 	def __Login__(self,url):
@@ -99,18 +107,13 @@ class DownLoadWeb(object):
 		result=self.htmlhandler.open(url,self.data);
 		self.htmlhandler.close();
 		
-	def __SaveHtmlEmailFile__(self,starturl,projectname):
+	def __SaveHtmlEmailFile__(self,starturl,projectname,html,index):
 		nexturl=starturl;
-		html=ParserHTMLOverDueMaintInfomations();
-		html.open(projectname);
+		if index == 0:
+			html.open(projectname);
 		while nexturl is not None:
 			result=self.htmlhandler.open(nexturl);
 			html.InitHTMLToBeautifulSoup(result.read());
 			result.close();
 			html.ConstructEmail();
 			nexturl=html.GetNextHTMLPage();
-		emaillist=html.GetProjectEmailList();
-		project_email={projectname: copy.deepcopy(emaillist)}; #特别留意深浅copy
-		self.ProjectEmailList.append({projectname: copy.deepcopy(html.GetProjectEmailList())});#特别留意深浅copy
-		html.close();
-		self.htmlhandler.close();
