@@ -22,6 +22,7 @@ class DownLoadWeb(object):
 		self.htmlhandler='';
 		self.parserhtmlhandler=''
 		self.filter={};
+		self.currentperson_idList=[];
 		self.main_url=self.xmlhandler.GetMaintsServerInfo("main-url");
 		#this post data is username and password , need wiresharke get network packages
 		self.data=urllib.urlencode({"username": self.xmlhandler.GetMaintsServerInfo("login-username"),
@@ -49,46 +50,48 @@ class DownLoadWeb(object):
 			print "DownLoad Project name is: ",ProjectList[index];
 			projectname=ProjectList[index];
 			project_Id=self.parserhtmlhandler.GetProjectId(projectname);
-			self.__DonwnLoadFromProjectId__(project_Id,projectname);
+			self.__DownLoadProjectByPerson__(project_Id,projectname);
 
 	#构建project id list 列表
 	def __ConstructProjectIDList__(self,url):
 		html_page=self.htmlhandler.open(url);
 		self.parserhtmlhandler=HTMLParserProjectToID();
 		self.parserhtmlhandler.feed(html_page.read());
+		html_page.close();
 		self.parserhtmlhandler.close();
 
-	def __DonwnLoadFromProjectId__(self,value,projectname):
+	def __DownLoadProjectByPerson__(self,value,projectname):
 		#http post funtion url to set_project.php? and set project_id=value, can change the project id
+		self.filter.clear();
 		self.filter["project_id"]=value;
 		self.htmlhandler.open(self.main_url+"/set_project.php?",urllib.urlencode(self.filter));
-		self.__DownLoadProjectByPerson__("scott.cao","resolved",projectname);#需要进行迭代修改
-		self.htmlhandler.close();
-
-	def __DownLoadProjectByPerson__(self,personname,hideStatus,projectname):
 		#请求构造选择人对应的handle id
-		result=self.htmlhandler.open("http://mantis.mstarsemi.com/return_dynamic_filters.php?view_type=simple&filter_target=handler_id_filter");
+		result=self.htmlhandler.open(self.main_url+"/return_dynamic_filters.php?view_type=advanced&filter_target=handler_id_filter");
 		html=HTMLParserAssignedToByPerson(result.read());
 		result.close();
 		html.ConstructPersonToIdList();
-		self.currentperson_id=html.GetPersonId(personname);
+		personList=self.xmlhandler.GetSetOwnerListByProject(projectname);
+		del self.currentperson_idList[:];
+		self.currentperson_idList=copy.deepcopy(html.GetPersonIdList(personList));
 		#请求构造选择hide status
-		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=show_status_filter');
+		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=advanced&filter_target=show_status_filter');
 		html=HTMLPaserHideStatus(result.read());
 		result.close();
 		html.ConstructHideStatus();
+		hideStatus=self.xmlhandler.GetProjectMaintsFilters(projectname,"hideStatus");
 		self.currentHideStatus_id=html.GetHideStatusId(hideStatus);
 		#发送对应人和hide status请求
 		self.filter.clear();
-		self.filter["type"]=1;
-		self.filter["view_type"]="simple";
-		self.filter["page_number"]=1;
-		self.filter["per_page"]=200;
-		self.filter["handler_id"]=self.currentperson_id;
+		self.filter["type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"type");
+		self.filter["view_type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"view_type");
+		self.filter["page_number"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"page_number");
+		self.filter["per_page"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"per_page");
+		self.filter["handler_id"]=self.currentperson_idList[0];#需要修改
 		self.filter["hide_status"]=self.currentHideStatus_id;
-		self.filter["filter"]="Apply Filter";
+		self.filter["filter"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"filter");
 		result=self.htmlhandler.open(self.main_url+"/view_all_set.php?f=3",urllib.urlencode(self.filter));
 		self.__SaveHtmlEmailFile__(self.main_url+"/view_all_bug_page.php",projectname);
+		self.htmlhandler.close();
 
 	def __Login__(self,url):
 		mycookie=cookielib.MozillaCookieJar();

@@ -7,7 +7,7 @@
         <!-- user this user and password send email-->
         <mail_user>mstar_scott_cao@163.com</mail_user>
         <!-- client password not login password-->
-        <mail_password>xxxxxx</mail_password>
+        <mail_password>xxxx</mail_password>
         <!-- Email title-->
         <mail_title>Mantis OverDue</mail_title>
     </SEND_EMAIL_INFO>
@@ -16,19 +16,21 @@
         <main-url>http://mantis.mstarsemi.com</main-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
         <login-username>scott.cao</login-username>
-        <login-password>xxxxx</login-password>
+        <login-password>xxxx</login-password>
     </MANTIS_URL>
     
     <MANTIS_PROJECT>
         <mantis-project-name>All Projects</mantis-project-name>
         <!--每个页面显示多少--->
         <manits-filter name="per_page">200</manits-filter>
+        <manits-filter name="type">1</manits-filter>
+        <manits-filter name="filter">Apply Filter</manits-filter>
+        <manits-filter name="view_type">advanced</manits-filter>
         <manits-filter name="page_number">1</manits-filter>
         <manits-filter name="hideStatus">resolved</manits-filter>
         <!--需要过滤的owner， 所有人为[any]--->
         <manits-filter name="owner">scott.cao</manits-filter>
         <email-cc>scott.cao@mstarsemi.com</email-cc>
-        <email-cc>albin.he@mstarsemi.com</email-cc>
     </MANTIS_PROJECT>
     
 </root>

@@ -32,17 +32,26 @@ class XMLConfigHandler(object):
         print projectsList;
         return projectsList;    
 
-    def GetProjectMaintsFilters(self,projectname):
-        print "projectname is :",projectname;
+    def GetProjectMaintsFilters(self,projectname,typename):
+        #print "projectname is :",projectname;
         mantis_filters=self.mantis_project_list[projectname].get("mantis-filter");
-        print mantis_filters;
-        return mantis_filters;
+        if typename in mantis_filters:
+            print "prject filter type name: ",mantis_filters[typename];
+            return mantis_filters[typename];
+        else:
+            print "can not get mantis fliter: ",typename;
+            return 0;
 
     def GetProjectEmailCCTo(self,projectname):
-        print "projectname is :",projectname;
+        #print "projectname is :",projectname;
         email_list=self.mantis_project_list[projectname]["email-cc"];
         print email_list;
         return email_list;
+
+    def GetSetOwnerListByProject(self,projectname):
+        owner_list=self.mantis_project_list[projectname]["owner"];
+        print owner_list;
+        return owner_list;
 
     def GetEmailServerInfo(self,key):
         #for debug
@@ -75,17 +84,22 @@ class XMLConfigHandler(object):
             currentProjectName="";
             mantisfilter={};
             emailccto=[];
+            ownerList=[];
             for child in tag.children:
                 if child.name == "mantis-project-name":
                     currentProjectName=child.get_text();
                 elif child.name == "manits-filter":
-                    mantisfilter[child.get("name")]=child.get_text();
+                    if child.get("name") == "owner":
+                        ownerList.append(child.get_text());
+                    else:
+                        mantisfilter[child.get("name")]=child.get_text();
                 elif child.name == "email-cc":
                     emailccto.append(child.get_text());
-            self.mantis_project_list[currentProjectName]={"mantis-filter": copy.deepcopy(mantisfilter),"email-cc":copy.deepcopy(emailccto)};
+
+            self.mantis_project_list[currentProjectName]={"mantis-filter": copy.deepcopy(mantisfilter),"email-cc":copy.deepcopy(emailccto),"owner": copy.deepcopy(ownerList)};
             #for debug
             for key in self.mantis_project_list:
-                #print "mantis_project_list key is: ",key;
-                #print "value", self.mantis_project_list[key];
+                print "mantis_project_list key is: ",key;
+                print "value", self.mantis_project_list[key];
                 for key2 in self.mantis_project_list[key]:
-                    print "debug2!", self.mantis_project_list[key][key2];
+                    print "debug!", self.mantis_project_list[key][key2];

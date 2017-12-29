@@ -55,14 +55,17 @@ class HTMLParserAssignedToByPerson(object):
 				#print "persion id: ",persionid;
 				self.person_id_dict[username]=persionid;
 
-	def GetPersonId(self,username):
-		if username in self.person_id_dict:
-			#print "username is: ",username;
-			#print "user project id:",self.person_id_dict[username];
-			return self.person_id_dict[username];
-		else:
-			print "无法获取username 对应的user id"
-			return "00000";
+	def GetPersonIdList(self,usernameList):
+		PersonIdList=[];
+		for index in xrange(len(usernameList)):
+			username=usernameList[index];
+			if username in self.person_id_dict:
+				#print "username is: ",username;
+				#print "user project id:",self.person_id_dict[username];
+				PersonIdList.append(self.person_id_dict[username]);
+			else:
+				print "无法获取username 对应的user id"
+		return PersonIdList;
 
 class HTMLPaserHideStatus(object):
 	"""docstring for ClassName"""
