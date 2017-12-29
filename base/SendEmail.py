@@ -5,35 +5,40 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
+from XMLHandler import XMLConfigHandler
 import copy
 
 class Email(object):
 
     def __init__(self,Handler):
-        self.mail_host=Handler.mail_host;
-        self.mail_user=Handler.mail_user;
-        self.mail_pass=Handler.mail_pass;
-        self.mail_title=Handler.mail_title;
-        self.parseby=Handler.parseby;
-       # if self.parseby == "Projects":
-        #    self.mailto_list=[]
-         #   self.mailto_list_cc=[];
-         #   self.mail_recver=[];
-        #else:
-        self.mailto_list=copy.deepcopy(Handler.mailto_list);
-        self.mailto_list_cc=copy.deepcopy(Handler.mailto_list_cc);
-        self.mail_recver=copy.deepcopy(Handler.mail_recver);
+        self.xmlHanler=Handler;
+        self.mail_host=Handler.GetEmailServerInfo("mail_host");
+        print "mail host: ",self.mail_host;
+        self.mail_user=Handler.GetEmailServerInfo("mail_user");
+        print "mail user: ",self.mail_user;
+        self.mail_pass=Handler.GetEmailServerInfo("mail_password");
+        print "mail pass: ",self.mail_pass
+        self.mail_title=Handler.GetEmailServerInfo("mail_title");
+        print "mail title: ",self.mail_title;
+        self.mailto_list=[];
+        self.mailto_list_cc=[];
+        self.mail_recver=[];
 
 
-    def AddEmailPerson(self,person,emailsuffix,bIsCC=False):
-        personemail=person+emailsuffix;
-        self.mail_recver.append(personemail);
+    def AddEmailPerson(self,person,emailsuffix="@mstarsemi.com",bIsCC=False):
         if bIsCC == False:
+            personemail=person+emailsuffix;
             self.mailto_list.append(personemail);
         else:
-            self.mailto_list_cc.append(personemail);    
+            personemail=person;
+            self.mailto_list_cc.append(personemail);
+        self.mail_recver.append(personemail);
 
     def SendEmails(self,path,ProjectName,bhasOverDue=True):
+        emailcctoList=self.xmlHanler.GetProjectEmailCCTo(ProjectName);
+        for key in  xrange(len(emailcctoList)):
+            print "email will be cc to: ",emailcctoList[key];
+            self.AddEmailPerson(emailcctoList[key],bIsCC=True);
         if bhasOverDue == True:
             try:
                 htmlf=open(path);

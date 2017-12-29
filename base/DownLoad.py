@@ -10,6 +10,7 @@ from HTMLParserProjectToID import HTMLParserProjectToID
 from HTMLParserProjectToID import ParserHTMLOverDueMaintInfomations
 from HTMLParserProjectToID import HTMLParserAssignedToByPerson
 from HTMLParserProjectToID import HTMLPaserHideStatus
+from XMLHandler import XMLConfigHandler
 import copy
 
 #download html form url
@@ -21,14 +22,15 @@ class DownLoadWeb(object):
 		self.htmlhandler='';
 		self.parserhtmlhandler=''
 		self.filter={};
+		self.main_url=self.xmlhandler.GetMaintsServerInfo("main-url");
 		#this post data is username and password , need wiresharke get network packages
-		self.data=urllib.urlencode({"username": self.xmlhandler.login_username,
-			"password": self.xmlhandler.login_password});
+		self.data=urllib.urlencode({"username": self.xmlhandler.GetMaintsServerInfo("login-username"),
+			"password": self.xmlhandler.GetMaintsServerInfo("login-password")});
 		self.headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'};
 		self.ProjectEmailList=[];
 
 	def StartDownLoad(self):
-		login_url=self.xmlhandler.login_url;
+		login_url=self.xmlhandler.GetMaintsServerInfo("login-url");
 		#login the mantis web server!!!
 		self.__Login__(login_url);
 		self.__DownLoadProject__(login_url);
@@ -42,7 +44,10 @@ class DownLoadWeb(object):
 
 	def __DownLoadProject__(self,starturl):
 		self.__ConstructProjectIDList__(starturl);
-		for projectname in self.xmlhandler.mantis_project_list:
+		ProjectList=self.xmlhandler.GetProjectList();
+		for index in xrange(len(ProjectList)):
+			print "DownLoad Project name is: ",ProjectList[index];
+			projectname=ProjectList[index];
 			project_Id=self.parserhtmlhandler.GetProjectId(projectname);
 			self.__DonwnLoadFromProjectId__(project_Id,projectname);
 
@@ -56,19 +61,19 @@ class DownLoadWeb(object):
 	def __DonwnLoadFromProjectId__(self,value,projectname):
 		#http post funtion url to set_project.php? and set project_id=value, can change the project id
 		self.filter["project_id"]=value;
-		self.htmlhandler.open(self.xmlhandler.main_url+"/set_project.php?",urllib.urlencode(self.filter));
+		self.htmlhandler.open(self.main_url+"/set_project.php?",urllib.urlencode(self.filter));
 		self.__DownLoadProjectByPerson__("scott.cao","resolved",projectname);#需要进行迭代修改
 		self.htmlhandler.close();
 
 	def __DownLoadProjectByPerson__(self,personname,hideStatus,projectname):
 		#请求构造选择人对应的handle id
-		result=self.htmlhandler.open(self.xmlhandler.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=handler_id_filter');
+		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=handler_id_filter');
 		html=HTMLParserAssignedToByPerson(result.read());
 		result.close();
 		html.ConstructPersonToIdList();
 		self.currentperson_id=html.GetPersonId(personname);
 		#请求构造选择hide status
-		result=self.htmlhandler.open(self.xmlhandler.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=hide_status_filter');
+		result=self.htmlhandler.open(self.main_url+'/return_dynamic_filters.php?view_type=simple&filter_target=hide_status_filter');
 		html=HTMLPaserHideStatus(result.read());
 		result.close();
 		html.ConstructHideStatus();
@@ -82,8 +87,8 @@ class DownLoadWeb(object):
 		self.filter["handler_id"]=self.currentperson_id;
 		self.filter["hide_status"]=self.currentHideStatus_id;
 		self.filter["filter"]="Apply Filter";
-		result=self.htmlhandler.open(self.xmlhandler.main_url+"/view_all_set.php?f=3",urllib.urlencode(self.filter));
-		self.__SaveHtmlEmailFile__(self.xmlhandler.main_url+"/view_all_bug_page.php",projectname);
+		result=self.htmlhandler.open(self.main_url+"/view_all_set.php?f=3",urllib.urlencode(self.filter));
+		self.__SaveHtmlEmailFile__(self.main_url+"/view_all_bug_page.php",projectname);
 
 	def __Login__(self,url):
 		mycookie=cookielib.MozillaCookieJar();

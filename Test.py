@@ -1,22 +1,25 @@
 #!/usr/bin/env python
 #coding: utf-8
 from base.SendEmail import Email
-import xml.sax
-from base.XMLHandler import XMLHandler
+import os
+from base.XMLHandler import XMLConfigHandler
 from base.DownLoad import DownLoadWeb
 import sys
 
 class TestClass(object):
-
 	def TestXMLHandler(self):
-		#create XML Reader
-		parser=xml.sax.make_parser();
-		#turn off namepsaces
-		parser.setFeature(xml.sax.handler.feature_namespaces,0);
-		#rewrite ContextHanler
-		self.Handler=XMLHandler();
-		parser.setContentHandler(self.Handler);
-		parser.parse("./config/config.xml");
+		with open("./config/config.xml") as filehandle:
+			filehandle=open("./config/config.xml");
+			self.Handler=XMLConfigHandler(filehandle.read());
+			filehandle.close();
+			self.Handler.ParseXMLConfig();
+			projectlist=self.Handler.GetProjectList();
+			#for index in xrange(len(projectlist)):
+			#	print "project name: is: ",projectlist[index];
+			#	print "mantis filter list is: ";
+			#	self.Handler.GetProjectMaintsFilters(projectlist[index]);
+			#	print "emaill cc list is: ";
+			#	self.Handler.GetProjectEmailCCTo(projectlist[index]);
 
 	def TestProjectS(self):
 		self.TestXMLHandler();
@@ -44,4 +47,5 @@ if __name__ == '__main__':
 	reload(sys);
 	sys.setdefaultencoding('utf-8');
 	test=TestClass();
+	#test.TestXMLHandler();
 	test.TestProjectS();

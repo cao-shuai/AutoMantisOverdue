@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <PARSEBY>Projects</PARSEBY>
-    <Email>
-    <!-- send email from infomations-->
+    
     <SEND_EMAIL_INFO>
         <!--user 163 smtp servers!!!-->
         <mail_host>smtp.163.com</mail_host>
         <!-- user this user and password send email-->
         <mail_user>mstar_scott_cao@163.com</mail_user>
         <!-- client password not login password-->
-        <mail_password>xxxx</mail_password>
+        <mail_password>xxxxxx</mail_password>
         <!-- Email title-->
         <mail_title>Mantis OverDue</mail_title>
     </SEND_EMAIL_INFO>
-    <!-- send email to the email addres list, if PARSEBY is Projects,this will not to use-->
-    <SENDTOLISTADDRS>
-        <person_cc>scott.cao@mstarsemi.com</person_cc>
-        <person_cc>albin.he@mstarsemi.com</person_cc>
-    </SENDTOLISTADDRS>
-    </Email>
-    <URL>
+    
+    <MANTIS_URL>
         <main-url>http://mantis.mstarsemi.com</main-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
         <login-username>scott.cao</login-username>
-        <login-password>xxxx</login-password>
-    </URL>
+        <login-password>xxxxx</login-password>
+    </MANTIS_URL>
+    
     <MANTIS_PROJECT>
-        <mantis-project-id>All Projects</mantis-project-id>
+        <mantis-project-name>All Projects</mantis-project-name>
+        <!--每个页面显示多少--->
+        <manits-filter name="per_page">200</manits-filter>
+        <manits-filter name="page_number">1</manits-filter>
+        <manits-filter name="hideStatus">resolved</manits-filter>
+        <!--需要过滤的owner， 所有人为[any]--->
+        <manits-filter name="owner">scott.cao</manits-filter>
+        <email-cc>scott.cao@mstarsemi.com</email-cc>
+        <email-cc>albin.he@mstarsemi.com</email-cc>
     </MANTIS_PROJECT>
+    
 </root>

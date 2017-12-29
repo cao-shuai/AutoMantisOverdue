@@ -1,55 +1,91 @@
 #!/usr/bin/env python
 #coding: utf-8
 import os
-import xml.sax
+import copy
+from bs4 import BeautifulSoup
 #xml handler for parser xml
-class XMLHandler(xml.sax.ContentHandler):
-    def __init__(self):
+class XMLConfigHandler(object):
+    """docstring for XMLHandler"""
+    def __init__(self, string):
+        self.main_url="";
         self.mail_host="";
-        self.mailto_list=[];
-        self.mailto_list_cc=[];
-        self.mail_recver=[];
         self.mail_user="";
         self.mail_pass="";
-        self.CurrentData="";
         self.mail_title="";
         self.login_url="";
         self.login_username="";
         self.login_password="";
-        self.mantis_project_list=[];
-        self.main_url="";
-        self.parseby="Projects";# defalut is by Projects!!!
+        self.mantis_project_list={};
+        self.emailserverinfo={};
+        self.maintis_urlInfo={};
+        #print string;
+        self.soup=BeautifulSoup(string,'lxml',from_encoding='utf-8');
 
-    def startElement(self,tag,attributes):
-        self.CurrentData=tag;
+    def ParseXMLConfig(self):
+        print "debug setp1";
+        self.__ConstructEmailServerInfo__();
+        self.__ConstructMaintServerInfo__();
+        self.__ConstructMaintProjectsInfo__();
+    
+    def GetProjectList(self):
+        projectsList=self.mantis_project_list.keys();
+        print projectsList;
+        return projectsList;    
 
-    def endElement(self,tag):
-        self.CurrentData="";
+    def GetProjectMaintsFilters(self,projectname):
+        print "projectname is :",projectname;
+        mantis_filters=self.mantis_project_list[projectname].get("mantis-filter");
+        print mantis_filters;
+        return mantis_filters;
 
-    def characters(self,content):
-        if self.CurrentData == "mail_host":
-            self.mail_host=content;
-        elif self.CurrentData == "mail_user":
-            self.mail_user=content;
-        elif self.CurrentData == "mail_password":
-            self.mail_pass=content;
-        elif self.CurrentData == "mail_title":
-        	self.mail_title=content;
-        elif self.CurrentData == "person":
-            self.mailto_list.append(content);
-            self.mail_recver.append(content);
-        elif self.CurrentData == "person_cc":
-            self.mail_recver.append(content);
-            self.mailto_list_cc.append(content);
-        elif self.CurrentData == "login-url":
-            self.login_url=content;
-        elif self.CurrentData == "login-username":
-            self.login_username=content;
-        elif self.CurrentData == "login-password":
-            self.login_password=content;
-        elif self.CurrentData == "mantis-project-id":
-            self.mantis_project_list.append(content);
-        elif self.CurrentData == "main-url":
-            self.main_url=content;
-        elif self.CurrentData == "PARSEBY":
-            self.parseby=content;
+    def GetProjectEmailCCTo(self,projectname):
+        print "projectname is :",projectname;
+        email_list=self.mantis_project_list[projectname]["email-cc"];
+        print email_list;
+        return email_list;
+
+    def GetEmailServerInfo(self,key):
+        #for debug
+        #for key in self.emailserverinfo:
+        #    print "emailserverinfo key is :",key;
+        #    print "emailserverinfo value is :",self.emailserverinfo[key];
+        return self.emailserverinfo[key];
+
+    def GetMaintsServerInfo(self,key):
+        #for key in self.maintis_urlInfo:
+        #    print "mantis serverinfo key is :",key;
+        #    print "mantis serverinfo value is :",self.maintis_urlInfo[key];
+        return self.maintis_urlInfo[key];
+
+    def __ConstructEmailServerInfo__(self):
+        for tag in self.soup.find_all("send_email_info"):
+            for child in tag.children:
+                if child.name is not None:
+                    self.emailserverinfo[child.name]=child.get_text();
+
+    def __ConstructMaintServerInfo__(self):
+        for tag in self.soup.find_all("mantis_url"):
+            for child in tag.children:
+                if child.name is not None:
+                    self.maintis_urlInfo[child.name]=child.get_text();
+
+    def __ConstructMaintProjectsInfo__(self):
+        for tag in self.soup.find_all('mantis_project'):
+            #获取到一个mantis的信息
+            currentProjectName="";
+            mantisfilter={};
+            emailccto=[];
+            for child in tag.children:
+                if child.name == "mantis-project-name":
+                    currentProjectName=child.get_text();
+                elif child.name == "manits-filter":
+                    mantisfilter[child.get("name")]=child.get_text();
+                elif child.name == "email-cc":
+                    emailccto.append(child.get_text());
+            self.mantis_project_list[currentProjectName]={"mantis-filter": copy.deepcopy(mantisfilter),"email-cc":copy.deepcopy(emailccto)};
+            #for debug
+            for key in self.mantis_project_list:
+                #print "mantis_project_list key is: ",key;
+                #print "value", self.mantis_project_list[key];
+                for key2 in self.mantis_project_list[key]:
+                    print "debug2!", self.mantis_project_list[key][key2];
