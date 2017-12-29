@@ -7,16 +7,16 @@
         <!-- user this user and password send email-->
         <mail_user>mstar_scott_cao@163.com</mail_user>
         <!-- client password not login password-->
-        <mail_password>xxxx</mail_password>
+        <mail_password>xxxxxx</mail_password>
         <!-- Email title-->
-        <mail_title>Mantis OverDue</mail_title>
+        <mail_title>FAE2SW5 Mantis OverDue</mail_title>
     </SEND_EMAIL_INFO>
     
     <MANTIS_URL>
         <main-url>http://mantis.mstarsemi.com</main-url>
         <login-url>http://mantis.mstarsemi.com/login.php</login-url>
         <login-username>scott.cao</login-username>
-        <login-password>xxxx</login-password>
+        <login-password>xxxxxx</login-password>
     </MANTIS_URL>
     
     <MANTIS_PROJECT>
@@ -25,12 +25,29 @@
         <manits-filter name="per_page">200</manits-filter>
         <manits-filter name="type">1</manits-filter>
         <manits-filter name="filter">Apply Filter</manits-filter>
-        <manits-filter name="view_type">advanced</manits-filter>
+        <manits-filter name="view_type">simple</manits-filter>
         <manits-filter name="page_number">1</manits-filter>
         <manits-filter name="hideStatus">resolved</manits-filter>
         <!--需要过滤的owner， 所有人为[any]--->
-        <manits-filter name="owner">scott.cao</manits-filter>
+        <manits-filter name="owner">jy.chen</manits-filter>
+        <manits-filter name="owner">ricky.zhang</manits-filter>
+        <manits-filter name="owner">kelvin.wei</manits-filter>
+        <manits-filter name="owner">wiki.wu</manits-filter><!-- 可能需要debug--->
+        <manits-filter name="owner">ben-jb.chiu</manits-filter><!--可能需要debug-->
+        <manits-filter name="owner">victor.ma</manits-filter>
+        <manits-filter name="owner">chao.ou</manits-filter>
+        <manits-filter name="owner">ethan.xiang</manits-filter>
+        <manits-filter name="owner">zekai.ou</manits-filter>
+        <manits-filter name="owner">toby.chan</manits-filter><!--可能需要debug-->
+        <manits-filter name="owner">lorry.lv</manits-filter>
+        <manits-filter name="owner">mike-bs.liu</manits-filter>
+        <manits-filter name="owner">pitt.lin</manits-filter>
+        <manits-filter name="owner">qianyuan.mo</manits-filter>
+        <manits-filter name="owner">mark.yuan</manits-filter>
+        <manits-filter name="owner">guardian.lee</manits-filter><!--可能需要debug-->
+        <manits-filter name="owner">tyler.zhong</manits-filter><!--可能需要debug-->
         <email-cc>scott.cao@mstarsemi.com</email-cc>
+        <email-cc>given.deng@mstarsemi.com</email-cc>
+        <email-cc>albin.he@mstarsemi.com</email-cc>
     </MANTIS_PROJECT>
-    
 </root>

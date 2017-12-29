@@ -101,6 +101,7 @@ class ParserHTMLOverDueMaintInfomations(object):
 		self.DueDate=0;
 		self.LastUpdate=0;
 		self.summary=0;
+		self.tabletype="";
 		for tag in self.soup.find_all('tr',class_="row-category"):
 			index=0;
 			for child in tag.children:
@@ -109,6 +110,9 @@ class ParserHTMLOverDueMaintInfomations(object):
 						self.ID=index;
 					elif child.get_text()=="Status":
 						self.Owner=index;
+					elif child.get_text()=="Assigned To":
+						self.Owner=index;
+						self.tabletype="Assigned To";
 					elif child.get_text()=="Due Date":
 						self.DueDate=index;
 					elif child.get_text()== "Updated":
@@ -123,7 +127,6 @@ class ParserHTMLOverDueMaintInfomations(object):
 		self.mantisDueDay='';
 		self.mantisLastUpdate='';
 		self.mantisDescription=''
-		self.bIsStore=False;
 		self.bIsOverDue=False;
 
 	def open(self,filename):
@@ -147,18 +150,17 @@ class ParserHTMLOverDueMaintInfomations(object):
 							#print "mantis id: ",child.string;
 							self.mantisId=child.string;
 						elif index == self.Owner: #mantis owner
-							for status in child.find_all('a'):
-								if status.has_attr('title') and status.get('title') == "open":
-									#print "this mantis need store";
-									self.bIsStore=True;
-							result=re.search(pattern_for_mantisowner,child.get_text());
-							if result is None:
-								print "mantis 未分配！！！";
-								self.mantisOwner=None;
+							if self.tabletype=="Assigned To":
+								self.mantisOwner=child.get_text();
 							else:
-								#print "mantis owner:",result.group()[1:-1];
-								#for string in child.strings:	
-								self.mantisOwner=result.group()[1:-1];
+								result=re.search(pattern_for_mantisowner,child.get_text());
+								if result is None:
+									print "mantis 未分配！！！";
+									self.mantisOwner=None;
+								else:
+									#print "mantis owner:",result.group()[1:-1];
+									#for string in child.strings:	
+									self.mantisOwner=result.group()[1:-1];
 						elif index == self.DueDate:#mantis due day
 							#print "mantis DueDay:",child.string;
 							self.mantisDueDay=child.string;
@@ -177,7 +179,7 @@ class ParserHTMLOverDueMaintInfomations(object):
 							#print "mantis Description",child.string;
 							self.mantisDescription=child.string;
 						index=index+1;
-				if self.bIsStore == True and self.bIsOverDue == True:
+				if self.bIsOverDue == True:
 					print "这些mantis即将被需要存储："
 					print "Mantis ID: ",self.mantisId;
 					print "Mantis Description :",self.mantisDescription;

@@ -42,6 +42,8 @@ class ConstructEmail(object):
 				self.filehander.write(self.html_Email_td_begin+"PM设定dueday"+self.html_Email_td_End);
 			else:
 				self.filehander.write(self.html_Email_td_begin+maintsdueday+self.html_Email_td_End);
+			if lastupdate is None:
+				lastupdate="留意自动程序";
 			self.filehander.write(self.html_Email_td_begin+lastupdate+self.html_Email_td_End);
 			if mantisowner is None:
 				self.filehander.write(self.html_Email_td_begin+"PM尽快分配问题"+self.html_Email_td_End);
