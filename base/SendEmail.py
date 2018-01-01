@@ -44,25 +44,27 @@ class Email(object):
                 htmlf=open(path);
                 self.html = htmlf.read();
             finally:
-                htmlf.close();True
+                htmlf.close();
         else:
             self.html="太棒了，今天没有mantis overdue！！！";
 
         #send email 
-        if self.__send_mail__(self.html,ProjectName):
+        if self.__send_mail__(ProjectName):
             return True;
         else:
             return False;
 
-    def __send_mail__(self,html,ProjectName):
+    def __send_mail__(self,ProjectName):
         msg = MIMEMultipart('alternative');
         msg['Subject'] = ProjectName+" "+self.mail_title;  
         msg['From'] = self.mail_user;
         msg['To'] = ",".join(self.mailto_list);
         msg['Cc'] = ",".join(self.mailto_list_cc);
-        part=MIMEText(html,'html',_charset='UTF-8');
+        part=MIMEText(self.html,'html',_charset='UTF-8');
         msg.attach(part);
-
+        #for index in xrange(len(self.mail_recver)):
+        #    print "email is: ",self.mail_recver[index];
+        #print "msg string",msg.as_string();
         try:
 	        smtp = smtplib.SMTP();
 	        smtp.connect(self.mail_host,25);
