@@ -23,7 +23,6 @@ class DownLoadWeb(object):
 		self.xmlhandler=handler;
 		self.htmlhandler='';
 		self.parserhtmlhandler=''
-		self.filter={};
 		self.currentperson_idList=[];
 		self.main_url=self.xmlhandler.GetMaintsServerInfo("main-url");
 		#this post data is username and password , need wiresharke get network packages
@@ -43,7 +42,6 @@ class DownLoadWeb(object):
 
 	def CloseDownLoad(self):
 		del self.ProjectEmailList[:];
-		self.filter.clear();
 
 	def __DownLoadProject__(self,starturl):
 		self.__ConstructProjectIDList__(starturl);
@@ -64,9 +62,10 @@ class DownLoadWeb(object):
 
 	def __DownLoadProjectByPerson__(self,value,projectname):
 		#http post funtion url to set_project.php? and set project_id=value, can change the project id
-		self.filter.clear();
-		self.filter["project_id"]=value;
-		self.htmlhandler.open(self.main_url+"/set_project.php?",urllib.urlencode(self.filter));
+		filterDirt={};
+		filterDirt.clear();
+		filterDirt["project_id"]=value;
+		self.htmlhandler.open(self.main_url+"/set_project.php?",urllib.urlencode(filterDirt));
 		#请求构造选择人对应的handle id
 		result=self.htmlhandler.open(self.main_url+"/return_dynamic_filters.php?view_type=advanced&filter_target=handler_id_filter");
 		html=HTMLParserAssignedToByPerson(result.read());
@@ -83,17 +82,17 @@ class DownLoadWeb(object):
 		hideStatus=self.xmlhandler.GetProjectMaintsFilters(projectname,"hideStatus");
 		self.currentHideStatus_id=html.GetHideStatusId(hideStatus);
 		#发送对应人和hide status请求
-		self.filter.clear();
-		self.filter["type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"type");
-		self.filter["view_type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"view_type");
-		self.filter["page_number"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"page_number");
-		self.filter["per_page"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"per_page");
-		self.filter["hide_status"]=self.currentHideStatus_id;
-		self.filter["filter"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"filter");
+		filterDirt.clear();
+		filterDirt["type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"type");
+		filterDirt["view_type"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"view_type");
+		filterDirt["page_number"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"page_number");
+		filterDirt["per_page"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"per_page");
+		filterDirt["hide_status"]=self.currentHideStatus_id;
+		filterDirt["filter"]=self.xmlhandler.GetProjectMaintsFilters(projectname,"filter");
 		currentprojecthtmlhander=ParserHTMLOverDueMaintInfomations();
 		for index in xrange(len(self.currentperson_idList)):
-			self.filter["handler_id"]=self.currentperson_idList[index];#需要修改
-			result=self.htmlhandler.open(self.main_url+"/view_all_set.php?f=3",urllib.urlencode(self.filter));
+			filterDirt["handler_id"]=self.currentperson_idList[index];#需要修改
+			result=self.htmlhandler.open(self.main_url+"/view_all_set.php?f=3",urllib.urlencode(filterDirt));
 			self.__SaveHtmlEmailFile__(self.main_url+"/view_all_bug_page.php",projectname,currentprojecthtmlhander,index);
 		emaillist=currentprojecthtmlhander.GetProjectEmailList();
 		#project_email={projectname: copy.deepcopy(emaillist)}; #特别留意深浅copy
