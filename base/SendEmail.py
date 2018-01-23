@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 from XMLHandler import XMLConfigHandler
 import copy
+import time
 
 class Email(object):
 
@@ -56,7 +57,7 @@ class Email(object):
 
     def __send_mail__(self,ProjectName):
         msg = MIMEMultipart('alternative');
-        msg['Subject'] = ProjectName+" "+self.mail_title;  
+        msg['Subject'] = ProjectName+" "+self.mail_title+" "+time.strftime('%y-%m-%d',time.localtime(time.time()));  
         msg['From'] = self.mail_user;
         msg['To'] = ",".join(self.mailto_list);
         msg['Cc'] = ",".join(self.mailto_list_cc);
